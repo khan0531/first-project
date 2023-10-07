@@ -2,6 +2,7 @@ package com.beauty.api.model.user.service;
 
 import com.beauty.api.model.user.dto.Member;
 import com.beauty.api.model.user.dto.MemberResponse;
+import com.beauty.api.model.user.dto.MemberSigninReQuest;
 import com.beauty.api.model.user.persist.entity.MemberEntity;
 import com.beauty.api.model.user.persist.repository.MemberRepository;
 import lombok.AllArgsConstructor;
@@ -33,5 +34,16 @@ public class MemberService implements UserDetailsService {
     MemberEntity result = this.memberRepository.save(member.toEntity());
 
     return MemberResponse.fromEntity(result);
+  }
+
+  public MemberResponse signIn(MemberSigninReQuest memberSigninReQuest) {
+    MemberEntity memberEntity = this.memberRepository.findByEmail(memberSigninReQuest.getEmail())
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디 입니다."));
+
+    if (!this.passwordEncoder.matches(memberSigninReQuest.getPassword(), memberEntity.getPassword())) {
+      throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+    }
+
+    return MemberResponse.fromEntity(memberEntity);
   }
 }
