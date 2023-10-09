@@ -1,8 +1,8 @@
 package com.beauty.api.model.user.service;
 
-import com.beauty.api.model.user.dto.Member;
 import com.beauty.api.model.user.dto.MemberResponse;
-import com.beauty.api.model.user.dto.MemberSigninReQuest;
+import com.beauty.api.model.user.dto.MemberSignInRequest;
+import com.beauty.api.model.user.dto.MemberSignUpRequest;
 import com.beauty.api.model.user.persist.entity.MemberEntity;
 import com.beauty.api.model.user.persist.repository.MemberRepository;
 import lombok.AllArgsConstructor;
@@ -20,23 +20,24 @@ public class MemberService implements UserDetailsService {
   private final PasswordEncoder passwordEncoder;
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return null;
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    return this.memberRepository.findByEmail(email)
+        .orElseThrow(() -> new UsernameNotFoundException("couldn't find user -> " + email));
   }
 
-  public MemberResponse signUp(Member member) {
-    boolean exists = this.memberRepository.existsByEmail(member.getEmail());
+  public MemberResponse signUp(MemberSignUpRequest memberSignUpRequest) {
+    boolean exists = this.memberRepository.existsByEmail(memberSignUpRequest.getEmail());
     if (exists) {
       throw new IllegalArgumentException("이미 존재하는 아이디 입니다.");
     }
 
-    member.setPassword(this.passwordEncoder.encode(member.getPassword()));
-    MemberEntity result = this.memberRepository.save(member.toEntity());
+    memberSignUpRequest.setPassword(this.passwordEncoder.encode(memberSignUpRequest.getPassword()));
+    MemberEntity result = this.memberRepository.save(memberSignUpRequest.toEntity());
 
     return MemberResponse.fromEntity(result);
   }
 
-  public MemberResponse signIn(MemberSigninReQuest memberSigninReQuest) {
+  public MemberEntity signIn(MemberSignInRequest memberSigninReQuest) {
     MemberEntity memberEntity = this.memberRepository.findByEmail(memberSigninReQuest.getEmail())
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디 입니다."));
 
@@ -44,6 +45,6 @@ public class MemberService implements UserDetailsService {
       throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
     }
 
-    return MemberResponse.fromEntity(memberEntity);
+    return memberEntity;
   }
 }

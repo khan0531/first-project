@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
+public class MemberSignUpRequest {
+
   private String name;
   private String email;
   private String password;
@@ -23,13 +24,13 @@ public class Member {
 
   public MemberEntity toEntity() {
     return MemberEntity.builder()
-      .name(this.name)
-      .email(this.email)
-      .password(this.password)
-      .phone(this.phone)
-      .birth(this.birth)
-      .roles(Collections.singletonList(Authority.ROLE_USER))
-      .createdAt(LocalDateTime.now())
-      .build();
+        .name(this.name)
+        .email(this.email)
+        .password(this.password)
+        .phone(this.phone)
+        .birth(this.birth)
+        .roles(Collections.singletonList(Authority.ROLE_USER))
+        .createdAt(LocalDateTime.now())
+        .build();
   }
 }
