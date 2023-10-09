@@ -18,7 +18,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -46,7 +45,6 @@ public class MemberEntity implements UserDetails {
   private String email;
 
   @NotBlank(message = "비밀번호를 입력해주세요.")
-  @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 입력해주세요.")
   private String password;
 
   @NotBlank(message = "전화번호를 입력해주세요.")

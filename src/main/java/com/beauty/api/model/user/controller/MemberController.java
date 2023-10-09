@@ -4,6 +4,7 @@ import com.beauty.api.model.user.dto.MemberSignInRequest;
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
 import com.beauty.api.model.user.service.MemberService;
 import com.beauty.api.security.TokenProvider;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class MemberController {
 
   //회원가입
   @PostMapping("/signup")
-  public ResponseEntity<?> signUp(@RequestBody MemberSignUpRequest memberSignUpRequest) {
+  public ResponseEntity<?> signUp(@RequestBody @Valid MemberSignUpRequest memberSignUpRequest) {
     var result = this.memberService.signUp(memberSignUpRequest);
     return ResponseEntity.ok(result);
   }
