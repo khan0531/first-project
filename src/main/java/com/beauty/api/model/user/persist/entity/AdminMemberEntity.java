@@ -1,8 +1,6 @@
 package com.beauty.api.model.user.persist.entity;
 
 import com.beauty.api.model.user.dto.constants.Authority;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -26,16 +24,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Entity(name = "member")
+@Entity(name = "admin_member")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberEntity implements UserDetails {
+public class AdminMemberEntity implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private String id;
 
   @NotBlank(message = "이름을 입력해주세요.")
   private String name;
@@ -51,9 +49,6 @@ public class MemberEntity implements UserDetails {
   @Column(unique = true)
   private String phone;
 
-  //  @NotBlank(message = "생년월일을 입력해주세요.")
-  private LocalDate birth;
-
   @ElementCollection(fetch = FetchType.LAZY)
   @Enumerated(EnumType.STRING)
   private List<Authority> roles;
@@ -63,7 +58,6 @@ public class MemberEntity implements UserDetails {
   private LocalDateTime updatedAt;
 
   @Override
-  @JsonIgnore
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return this.roles.stream()
         .map(Enum::name)

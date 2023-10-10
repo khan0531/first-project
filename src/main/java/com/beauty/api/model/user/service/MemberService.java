@@ -3,6 +3,7 @@ package com.beauty.api.model.user.service;
 import com.beauty.api.model.user.dto.MemberResponse;
 import com.beauty.api.model.user.dto.MemberSignInRequest;
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
+import com.beauty.api.model.user.dto.MemberUpdateRequest;
 import com.beauty.api.model.user.persist.entity.MemberEntity;
 import com.beauty.api.model.user.persist.repository.MemberRepository;
 import lombok.AllArgsConstructor;
@@ -46,5 +47,21 @@ public class MemberService implements UserDetailsService {
     }
 
     return memberEntity;
+  }
+
+  public MemberResponse updateUser(MemberUpdateRequest memberUpdateRequest) {
+    MemberEntity memberEntity = this.memberRepository.findByEmail(memberUpdateRequest.getEmail())
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디 입니다."));
+
+    this.memberRepository.save(memberUpdateRequest.toEntity());
+
+    return MemberResponse.fromEntity(memberEntity);
+  }
+
+  public void deleteUser(Long id) {
+    MemberEntity memberEntity = this.memberRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디 입니다."));
+
+    this.memberRepository.delete(memberEntity);
   }
 }
