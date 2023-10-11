@@ -29,19 +29,20 @@ public class ShopController {
 
   //샵 상세 조회
   @GetMapping("/{id}")
-  public ResponseEntity<?> getShop(@PathVariable String id) {
-    return null;
+  public ResponseEntity<?> getShop(@PathVariable Long id) {
+    var result = this.shopService.getShop(id);
+    return ResponseEntity.ok(result);
   }
 
   //샵 리뷰 조회
   @GetMapping("/{id}/review")
-  public ResponseEntity<?> getShopReview(@PathVariable String id) {
+  public ResponseEntity<?> getShopReview(@PathVariable Long id) {
     return null;
   }
 
   //문의 등록
   @PostMapping("/{id}/inquiry")
-  public ResponseEntity<?> writeInquiry(@PathVariable String id) {
+  public ResponseEntity<?> writeInquiry(@PathVariable Long id) {
     return null;
   }
 
