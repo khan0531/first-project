@@ -1,43 +1,41 @@
 package com.beauty.api.model.user.controller;
 
-import com.beauty.api.model.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
-public class UserController {
-  private final UserService userService;
+@RequestMapping("/admin-member")
+public class AdminMemberController {
 
-  //회원가입
   @PostMapping("/signup")
-  public void signUp() {
-
+  public ResponseEntity<?> signUp() {
+    return null;
   }
 
   //로그인
-  @PostMapping("/signin")
-  public void signIn() {
-
+  @PostMapping("/signIn")
+  public ResponseEntity<?> signIn() {
+    return null;
   }
 
 
   //회원 정보 수정
-  @PutMapping
-  public void updateUser() {
-
+  @PatchMapping
+  public ResponseEntity<?> updateUser() {
+    return null;
   }
 
   //회원 탈퇴
   @DeleteMapping
-  public void deleteUser() {
-
+  public ResponseEntity<?> deleteUser() {
+    return null;
   }
+
+  
 }
