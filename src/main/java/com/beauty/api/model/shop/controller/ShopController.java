@@ -2,11 +2,13 @@ package com.beauty.api.model.shop.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -17,7 +19,8 @@ public class ShopController {
 
   //샵 리스트 조회
   @GetMapping
-  public ResponseEntity<?> getShopList() {
+  public ResponseEntity<?> getShopList(@RequestParam String name, @RequestParam String cosmeticType,
+      @RequestParam Long reviewCount, @RequestParam Double rating, Pageable pageable) {
     return null;
   }
 
