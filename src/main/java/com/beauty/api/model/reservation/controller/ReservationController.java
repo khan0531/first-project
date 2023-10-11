@@ -1,5 +1,6 @@
 package com.beauty.api.model.reservation.controller;
 
+import com.beauty.api.model.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/reservation")
 public class ReservationController {
+
+  private final ReservationService reservationService;
 
   //예약하기
   @PostMapping

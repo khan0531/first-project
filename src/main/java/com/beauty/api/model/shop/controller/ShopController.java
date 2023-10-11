@@ -1,5 +1,6 @@
 package com.beauty.api.model.shop.controller;
 
+import com.beauty.api.model.shop.service.ShopService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/shop")
 public class ShopController {
+
+  private final ShopService shopService;
 
   //샵 리스트 조회
   @GetMapping
