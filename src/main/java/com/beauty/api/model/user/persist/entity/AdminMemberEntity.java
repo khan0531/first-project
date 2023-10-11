@@ -33,7 +33,7 @@ public class AdminMemberEntity implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private String id;
+  private Long id;
 
   @NotBlank(message = "이름을 입력해주세요.")
   private String name;

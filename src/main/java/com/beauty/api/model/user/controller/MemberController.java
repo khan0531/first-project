@@ -39,7 +39,7 @@ public class MemberController {
   }
 
   //로그인
-  @PostMapping("/signin")
+  @PostMapping("/signIn")
   public ResponseEntity<?> signIn(@RequestBody MemberSignInRequest memberSignInRequest) {
     var member = this.memberService.signIn(memberSignInRequest);
     String token = this.tokenProvider.generateToken(
@@ -60,7 +60,7 @@ public class MemberController {
   }
 
   //비밀번호 수정
-  @PatchMapping
+  @PatchMapping("/password")
   public ResponseEntity<?> updatePassword(@AuthenticationPrincipal MemberEntity memberEntity) {
     return null;
   }
@@ -84,13 +84,13 @@ public class MemberController {
   }
 
   //아이디(이메일) 찾기
-  @GetMapping()
+  @GetMapping("/email")
   public ResponseEntity<?> findEmail() {
     return null;
   }
 
   //비밀번호 찾기(재설정)
-  @GetMapping()
+  @GetMapping("/password")
   public ResponseEntity<?> findPassword() {
     return null;
   }

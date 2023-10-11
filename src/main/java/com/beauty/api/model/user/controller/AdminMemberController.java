@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/admin-member")
 public class AdminMemberController {
 
   @PostMapping("/signup")
@@ -19,7 +19,7 @@ public class AdminMemberController {
   }
 
   //로그인
-  @PostMapping("/signin")
+  @PostMapping("/signIn")
   public ResponseEntity<?> signIn() {
     return null;
   }
@@ -28,14 +28,14 @@ public class AdminMemberController {
   //회원 정보 수정
   @PatchMapping
   public ResponseEntity<?> updateUser() {
-
     return null;
   }
 
   //회원 탈퇴
   @DeleteMapping
   public ResponseEntity<?> deleteUser() {
-
     return null;
   }
+
+  
 }
