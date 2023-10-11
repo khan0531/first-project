@@ -2,6 +2,7 @@ package com.beauty.api.model.reservation.service;
 
 import com.beauty.api.model.reservation.dto.ReservationRequest;
 import com.beauty.api.model.reservation.dto.ReservationResponse;
+import com.beauty.api.model.reservation.dto.ReservationUpdateRequest;
 import com.beauty.api.model.reservation.dto.constants.ReservationStatus;
 import com.beauty.api.model.reservation.persist.entity.ReservationEntity;
 import com.beauty.api.model.reservation.persist.repository.ReservationRepository;
@@ -77,5 +78,28 @@ public class ReservationService {
       }
     }
     return true;
+  }
+
+  public ReservationResponse updateReservation(ReservationUpdateRequest reservationUpdateRequest) {
+    ReservationEntity reservationEntity = this.reservationRepository.findById(reservationUpdateRequest.getId())
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다."));
+
+    if (reservationEntity.getStatus().equals(ReservationStatus.WAITING)) {
+
+      if (!checkReservationTime(reservationUpdateRequest.getReservationTime(), reservationEntity.getShop())) {
+        throw new IllegalArgumentException("선택하신 시간대는 예약이 불가능 합니다.");
+      }
+
+      return ReservationResponse.fromEntity(this.reservationRepository.save(reservationUpdateRequest.toEntity()));
+    }
+
+    throw new IllegalArgumentException("예약이 없습니다. 혹은 예약이 취소되었거나, 확인이 완료된 예약은 취소 및 변경이 불가능 합니다. 매장에 문의해주세요.");
+  }
+
+  public ReservationResponse getReservation(Long id) {
+    ReservationEntity reservationEntity = this.reservationRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다."));
+
+    return ReservationResponse.fromEntity(reservationEntity);
   }
 }
