@@ -1,6 +1,7 @@
 package com.beauty.api.model.reservation.controller;
 
 import com.beauty.api.model.reservation.dto.ReservationRequest;
+import com.beauty.api.model.reservation.dto.ReservationUpdateRequest;
 import com.beauty.api.model.reservation.service.ReservationService;
 import com.beauty.api.model.user.persist.entity.MemberEntity;
 import lombok.RequiredArgsConstructor;
@@ -27,31 +28,34 @@ public class ReservationController {
   @PostMapping
   public ResponseEntity<?> reservation(@AuthenticationPrincipal MemberEntity memberEntity,
       @RequestBody ReservationRequest reservationRequest) {
-    this.reservationService.reservation(reservationRequest);
-    return null;
+    var result = this.reservationService.reservation(reservationRequest);
+    return ResponseEntity.ok(result);
   }
 
   //예약 수정
   @PatchMapping("/{id}")
-  public ResponseEntity<?> updateReservation(@PathVariable String id) {
-    return null;
+  public ResponseEntity<?> updateReservation(@AuthenticationPrincipal MemberEntity memberEntity, @PathVariable Long id,
+      @RequestBody ReservationUpdateRequest reservationUpdateRequest) {
+    var result = this.reservationService.updateReservation(reservationUpdateRequest);
+    return ResponseEntity.ok(result);
   }
 
-  //예약 취소
-  @PatchMapping("/{id}/cancel")
-  public ResponseEntity<?> cancelReservation(@PathVariable String id) {
-    return null;
-  }
+  //예약 취소 -> 수정이랑 합침
+//  @PatchMapping("/{id}/cancel")
+//  public ResponseEntity<?> cancelReservation(@PathVariable String id) {
+//    return null;
+//  }
 
   //예약 상세 조회
   @GetMapping("/{id}")
-  public ResponseEntity<?> getReservation(@PathVariable String id) {
-    return null;
+  public ResponseEntity<?> getReservation(@PathVariable Long id) {
+    var result = this.reservationService.getReservation(id);
+    return ResponseEntity.ok(result);
   }
 
   //내 예약에 대한 리뷰 작성
   @PostMapping("/{id}/review")
-  public ResponseEntity<?> writeReview(@PathVariable String id) {
+  public ResponseEntity<?> writeReview(@PathVariable Long id) {
     return null;
   }
 
