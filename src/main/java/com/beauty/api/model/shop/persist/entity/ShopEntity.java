@@ -50,4 +50,8 @@ public class ShopEntity {
   private Long ratingSum;
 
   private Long reviewCount;
+
+  private LocalDateTime createdAt;
+
+  private LocalDateTime updatedAt;
 }
