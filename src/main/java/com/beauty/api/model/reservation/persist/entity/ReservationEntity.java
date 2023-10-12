@@ -27,7 +27,7 @@ public class ReservationEntity {
 
   private LocalDateTime reservationTime;
 
-  private String content;
+  private String contents;
 
   @ManyToOne
   private MemberEntity member;

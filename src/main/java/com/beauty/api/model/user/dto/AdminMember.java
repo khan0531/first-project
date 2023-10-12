@@ -1,5 +1,6 @@
-package com.beauty.api.model.user.dto.constants;
+package com.beauty.api.model.user.dto;
 
+import com.beauty.api.model.user.dto.constants.Authority;
 import com.beauty.api.model.user.persist.entity.AdminMemberEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Collection;

@@ -1,5 +1,6 @@
 package com.beauty.api.model.shop.controller;
 
+import com.beauty.api.model.Inquiry.service.InquiryService;
 import com.beauty.api.model.shop.service.ShopService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ShopController {
 
   private final ShopService shopService;
+  private final InquiryService inquiryService;
 
   //샵 리스트 조회
   @GetMapping
@@ -29,19 +31,20 @@ public class ShopController {
 
   //샵 상세 조회
   @GetMapping("/{id}")
-  public ResponseEntity<?> getShop(@PathVariable String id) {
-    return null;
+  public ResponseEntity<?> getShop(@PathVariable Long id) {
+    var result = this.shopService.getShop(id);
+    return ResponseEntity.ok(result);
   }
 
   //샵 리뷰 조회
   @GetMapping("/{id}/review")
-  public ResponseEntity<?> getShopReview(@PathVariable String id) {
+  public ResponseEntity<?> getShopReviewList(@PathVariable Long id) {
     return null;
   }
 
   //문의 등록
   @PostMapping("/{id}/inquiry")
-  public ResponseEntity<?> writeInquiry(@PathVariable String id) {
+  public ResponseEntity<?> writeInquiry(@PathVariable Long id) {
     return null;
   }
 

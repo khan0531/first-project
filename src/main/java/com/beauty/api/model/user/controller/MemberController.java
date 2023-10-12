@@ -4,7 +4,6 @@ import com.beauty.api.model.user.dto.Member;
 import com.beauty.api.model.user.dto.MemberSignInRequest;
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
 import com.beauty.api.model.user.dto.MemberUpdateRequest;
-import com.beauty.api.model.user.persist.entity.MemberEntity;
 import com.beauty.api.model.user.service.MemberService;
 import com.beauty.api.security.TokenProvider;
 import javax.validation.Valid;
@@ -66,16 +65,13 @@ public class MemberController {
 
   //비밀번호 수정
   @PatchMapping("/password")
-  public ResponseEntity<?> updatePassword(@AuthenticationPrincipal MemberEntity memberEntity) {
+  public ResponseEntity<?> updatePassword(@AuthenticationPrincipal Member member) {
     return null;
   }
 
   //회원 탈퇴
   @DeleteMapping
-  public ResponseEntity<?> deleteUser(@AuthenticationPrincipal MemberEntity memberEntity, @RequestParam Long id) {
-    if (!memberEntity.getId().equals(id)) {
-      return ResponseEntity.badRequest().build();
-    }
+  public ResponseEntity<?> deleteUser(@AuthenticationPrincipal Member member, @RequestParam Long id) {
 
     this.memberService.deleteUser(id);
 
@@ -84,7 +80,7 @@ public class MemberController {
 
   //회원 정보 조회(내 정보 보기)
   @GetMapping("/{id}")
-  public ResponseEntity<?> getUser(@AuthenticationPrincipal MemberEntity memberEntity, @RequestParam Long id) {
+  public ResponseEntity<?> getUser(@AuthenticationPrincipal Member member, @RequestParam Long id) {
     return null;
   }
 
@@ -102,38 +98,40 @@ public class MemberController {
 
   //내 예약 목록 조회
   @GetMapping("/{id}/reservation")
-  public ResponseEntity<?> getReservationList(@PathVariable String id) {
+  public ResponseEntity<?> getReservationList(@AuthenticationPrincipal Member member, @PathVariable Long id) {
     return null;
   }
 
   //내 예약 리뷰 조회
   @GetMapping("/{id}/review")
-  public ResponseEntity<?> getReviewList(@PathVariable String id) {
+  public ResponseEntity<?> getReviewList(@AuthenticationPrincipal Member member, @PathVariable Long id) {
     return null;
   }
 
   //내 예약에 대한 리뷰 수정
   @PatchMapping("/{memberId}/review/{reviewId}")
-  public ResponseEntity<?> updateReview(@PathVariable String memberId, @PathVariable String reviewId) {
+  public ResponseEntity<?> updateReview(@AuthenticationPrincipal Member member, @PathVariable Long memberId,
+      @PathVariable Long reviewId) {
     return null;
   }
 
   //내 예약 삭제
   @DeleteMapping("/{memberId}/reservation/{reservationId}")
-  public ResponseEntity<?> deleteReservation(@PathVariable String memberId,
-      @PathVariable String reservationId) {
+  public ResponseEntity<?> deleteReservation(@AuthenticationPrincipal Member member, @PathVariable Long memberId,
+      @PathVariable Long reservationId) {
     return null;
   }
 
   //내 문의 조회
   @GetMapping("/{id}/inquiry")
-  public ResponseEntity<?> getInquiryList(@PathVariable String id) {
+  public ResponseEntity<?> getInquiryList(@AuthenticationPrincipal Member member, @PathVariable Long id) {
     return null;
   }
 
   //내 문의 수정
   @PatchMapping("/{memberId}/inquiry/{inquiryId}")
-  public ResponseEntity<?> updateInquiry(@PathVariable String inquiryId, @PathVariable String memberId) {
+  public ResponseEntity<?> updateInquiry(@AuthenticationPrincipal Member member, @PathVariable Long inquiryId,
+      @PathVariable Long memberId) {
     return null;
   }
 }
