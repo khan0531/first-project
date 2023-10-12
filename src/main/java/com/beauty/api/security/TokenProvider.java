@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -48,6 +49,7 @@ public class TokenProvider {
         .compact();
   }
 
+  @Transactional
   public Authentication getAuthentication(String jwt) {
     UserDetails userDetails = this.memberService.loadUserByUsername(this.getUsername(jwt));
     return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
