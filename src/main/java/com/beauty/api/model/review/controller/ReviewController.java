@@ -19,7 +19,8 @@ public class ReviewController {
 
   //리뷰 상세 조회
   @GetMapping("/{id}")
-  public ResponseEntity<?> getReview(@PathVariable String id) {
-    return null;
+  public ResponseEntity<?> getReview(@PathVariable Long id) {
+    var result = this.reviewService.getReview(id);
+    return ResponseEntity.ok(result);
   }
 }
