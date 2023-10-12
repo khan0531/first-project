@@ -1,5 +1,6 @@
 package com.beauty.api.model.user.service;
 
+import com.beauty.api.model.user.dto.AdminMember;
 import com.beauty.api.model.user.persist.repository.AdminMemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,7 @@ public class AdminMemberService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     return this.adminMemberRepository.findByEmail(email)
+        .map(AdminMember::fromEntity)
         .orElseThrow(() -> new UsernameNotFoundException("couldn't find user -> " + email));
   }
 }
