@@ -1,5 +1,6 @@
 package com.beauty.api.model.user.service;
 
+import com.beauty.api.model.user.dto.Member;
 import com.beauty.api.model.user.dto.MemberResponse;
 import com.beauty.api.model.user.dto.MemberSignInRequest;
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
@@ -23,6 +24,7 @@ public class MemberService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     return this.memberRepository.findByEmail(email)
+        .map(Member::fromEntity)
         .orElseThrow(() -> new UsernameNotFoundException("couldn't find user -> " + email));
   }
 
