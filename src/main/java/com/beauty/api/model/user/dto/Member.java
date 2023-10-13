@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 public class Member implements UserDetails {
 
+  private Long id;
   private String email;
   private List<Authority> roles;
   private String password;
@@ -60,6 +61,7 @@ public class Member implements UserDetails {
 
   public static Member fromEntity(MemberEntity memberEntity) {
     return Member.builder()
+        .id(memberEntity.getId())
         .email(memberEntity.getEmail())
         .roles(memberEntity.getRoles())
         .password(memberEntity.getPassword())
