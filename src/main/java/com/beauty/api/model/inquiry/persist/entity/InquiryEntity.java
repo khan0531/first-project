@@ -1,4 +1,4 @@
-package com.beauty.api.model.Inquiry.persist.entity;
+package com.beauty.api.model.inquiry.persist.entity;
 
 import com.beauty.api.model.shop.persist.entity.ShopEntity;
 import com.beauty.api.model.user.persist.entity.MemberEntity;

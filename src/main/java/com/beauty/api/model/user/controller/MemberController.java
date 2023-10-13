@@ -1,5 +1,8 @@
 package com.beauty.api.model.user.controller;
 
+import com.beauty.api.model.inquiry.dto.InquiryResponse;
+import com.beauty.api.model.inquiry.dto.InquiryUpdateRequest;
+import com.beauty.api.model.inquiry.service.InquiryService;
 import com.beauty.api.model.reservation.service.ReservationService;
 import com.beauty.api.model.review.dto.ReviewResponse;
 import com.beauty.api.model.review.dto.ReviewUpdateRequest;
@@ -37,6 +40,8 @@ public class MemberController {
   private final ReservationService reservationService;
 
   private final ReviewService reviewService;
+
+  private final InquiryService inquiryService;
 
   private final TokenProvider tokenProvider;
 
@@ -123,7 +128,7 @@ public class MemberController {
     ReviewResponse reviewResponse = this.reviewService.updateReview(reviewUpdateRequest);
     return ResponseEntity.ok(reviewResponse);
   }
-  
+
   //내 문의 조회
   @GetMapping("/{id}/inquiry")
   public ResponseEntity<?> getInquiryList(@AuthenticationPrincipal Member member, @PathVariable Long id) {
@@ -133,7 +138,8 @@ public class MemberController {
   //내 문의 수정
   @PatchMapping("/{memberId}/inquiry/{inquiryId}")
   public ResponseEntity<?> updateInquiry(@AuthenticationPrincipal Member member, @PathVariable Long inquiryId,
-      @PathVariable Long memberId) {
-    return null;
+      @PathVariable Long memberId, @RequestBody InquiryUpdateRequest inquiryUpdateRequest) {
+    InquiryResponse inquiryResponse = this.inquiryService.updateInquiry(inquiryUpdateRequest);
+    return ResponseEntity.ok(inquiryResponse);
   }
 }

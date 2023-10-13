@@ -1,6 +1,6 @@
-package com.beauty.api.model.Inquiry.controller;
+package com.beauty.api.model.inquiry.controller;
 
-import com.beauty.api.model.Inquiry.service.InquiryService;
+import com.beauty.api.model.inquiry.service.InquiryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

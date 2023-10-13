@@ -1,8 +1,8 @@
 package com.beauty.api.model.shop.controller;
 
-import com.beauty.api.model.Inquiry.dto.InquiryInput;
-import com.beauty.api.model.Inquiry.dto.InquiryResponse;
-import com.beauty.api.model.Inquiry.service.InquiryService;
+import com.beauty.api.model.inquiry.dto.InquiryInput;
+import com.beauty.api.model.inquiry.dto.InquiryResponse;
+import com.beauty.api.model.inquiry.service.InquiryService;
 import com.beauty.api.model.review.service.ReviewService;
 import com.beauty.api.model.shop.service.ShopService;
 import com.beauty.api.model.user.dto.Member;

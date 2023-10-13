@@ -1,9 +1,10 @@
-package com.beauty.api.model.Inquiry.service;
+package com.beauty.api.model.inquiry.service;
 
-import com.beauty.api.model.Inquiry.dto.InquiryInput;
-import com.beauty.api.model.Inquiry.dto.InquiryResponse;
-import com.beauty.api.model.Inquiry.persist.entity.InquiryEntity;
-import com.beauty.api.model.Inquiry.persist.repository.InquiryRepository;
+import com.beauty.api.model.inquiry.dto.InquiryInput;
+import com.beauty.api.model.inquiry.dto.InquiryResponse;
+import com.beauty.api.model.inquiry.dto.InquiryUpdateRequest;
+import com.beauty.api.model.inquiry.persist.entity.InquiryEntity;
+import com.beauty.api.model.inquiry.persist.repository.InquiryRepository;
 import com.beauty.api.model.shop.persist.entity.ShopEntity;
 import com.beauty.api.model.shop.persist.repository.ShopRepository;
 import com.beauty.api.model.user.persist.entity.MemberEntity;
@@ -40,6 +41,17 @@ public class InquiryService {
         .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
     InquiryEntity inquiryEntity = this.inquiryRepository.save(inquiryInput.toEntity(shopEntity, memberEntity));
+
+    return InquiryResponse.fromEntity(inquiryEntity);
+  }
+
+  public InquiryResponse updateInquiry(InquiryUpdateRequest inquiryUpdateRequest) {
+    boolean exist = this.inquiryRepository.existsById(inquiryUpdateRequest.getId());
+    if (!exist) {
+      throw new IllegalArgumentException("해당 문의가 존재하지 않습니다.");
+    }
+
+    InquiryEntity inquiryEntity = this.inquiryRepository.save(inquiryUpdateRequest.toEntity());
 
     return InquiryResponse.fromEntity(inquiryEntity);
   }

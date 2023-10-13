@@ -1,6 +1,6 @@
-package com.beauty.api.model.Inquiry.dto;
+package com.beauty.api.model.inquiry.dto;
 
-import com.beauty.api.model.Inquiry.persist.entity.InquiryEntity;
+import com.beauty.api.model.inquiry.persist.entity.InquiryEntity;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

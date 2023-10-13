@@ -1,8 +1,6 @@
-package com.beauty.api.model.Inquiry.dto;
+package com.beauty.api.model.inquiry.dto;
 
-import com.beauty.api.model.Inquiry.persist.entity.InquiryEntity;
-import com.beauty.api.model.shop.persist.entity.ShopEntity;
-import com.beauty.api.model.user.persist.entity.MemberEntity;
+import com.beauty.api.model.inquiry.persist.entity.InquiryEntity;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,25 +11,18 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InquiryInput {
+public class InquiryUpdateRequest {
 
-  private Long shopId;
-
-  private Long memberId;
-
+  private Long id;
   private String title;
-
   private String content;
-
   private String image;
 
-  public InquiryEntity toEntity(ShopEntity shopEntity, MemberEntity memberEntity) {
+  public InquiryEntity toEntity() {
     return InquiryEntity.builder()
         .title(this.title)
         .content(this.content)
         .image(this.image)
-        .member(memberEntity)
-        .shop(shopEntity)
         .createdAt(LocalDateTime.now())
         .build();
   }
