@@ -3,6 +3,10 @@ package com.beauty.api.model.reservation.controller;
 import com.beauty.api.model.reservation.dto.ReservationRequest;
 import com.beauty.api.model.reservation.dto.ReservationUpdateRequest;
 import com.beauty.api.model.reservation.service.ReservationService;
+import com.beauty.api.model.review.dto.ReviewInput;
+import com.beauty.api.model.review.dto.ReviewResponse;
+import com.beauty.api.model.review.service.ReviewService;
+import com.beauty.api.model.user.dto.Member;
 import com.beauty.api.model.user.persist.entity.MemberEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReservationController {
 
   private final ReservationService reservationService;
+
+  private final ReviewService reviewService;
 
   //예약하기
   @PostMapping
@@ -55,8 +61,10 @@ public class ReservationController {
 
   //내 예약에 대한 리뷰 작성
   @PostMapping("/{id}/review")
-  public ResponseEntity<?> writeReview(@PathVariable Long id) {
-    return null;
+  public ResponseEntity<?> writeReview(@AuthenticationPrincipal Member member, @PathVariable Long id,
+      @RequestBody ReviewInput reviewInput) {
+    ReviewResponse reviewResponse = this.reviewService.writeReview(reviewInput);
+    return ResponseEntity.ok(reviewResponse);
   }
 
 
