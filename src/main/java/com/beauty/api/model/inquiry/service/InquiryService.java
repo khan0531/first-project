@@ -55,4 +55,11 @@ public class InquiryService {
 
     return InquiryResponse.fromEntity(inquiryEntity);
   }
+
+  public InquiryResponse getInquiry(Long id) {
+    InquiryEntity inquiryEntity = this.inquiryRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("존재하지 않는 문의입니다."));
+
+    return InquiryResponse.fromEntity(inquiryEntity);
+  }
 }
