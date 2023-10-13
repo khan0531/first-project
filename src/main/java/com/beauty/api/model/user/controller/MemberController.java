@@ -1,5 +1,9 @@
 package com.beauty.api.model.user.controller;
 
+import com.beauty.api.model.reservation.service.ReservationService;
+import com.beauty.api.model.review.dto.ReviewResponse;
+import com.beauty.api.model.review.dto.ReviewUpdateRequest;
+import com.beauty.api.model.review.service.ReviewService;
 import com.beauty.api.model.user.dto.Member;
 import com.beauty.api.model.user.dto.MemberSignInRequest;
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
@@ -29,6 +33,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
   private final MemberService memberService;
+
+  private final ReservationService reservationService;
+
+  private final ReviewService reviewService;
 
   private final TokenProvider tokenProvider;
 
@@ -111,17 +119,11 @@ public class MemberController {
   //내 예약에 대한 리뷰 수정
   @PatchMapping("/{memberId}/review/{reviewId}")
   public ResponseEntity<?> updateReview(@AuthenticationPrincipal Member member, @PathVariable Long memberId,
-      @PathVariable Long reviewId) {
-    return null;
+      @PathVariable Long reviewId, @RequestBody ReviewUpdateRequest reviewUpdateRequest) {
+    ReviewResponse reviewResponse = this.reviewService.updateReview(reviewUpdateRequest);
+    return ResponseEntity.ok(reviewResponse);
   }
-
-  //내 예약 삭제
-  @DeleteMapping("/{memberId}/reservation/{reservationId}")
-  public ResponseEntity<?> deleteReservation(@AuthenticationPrincipal Member member, @PathVariable Long memberId,
-      @PathVariable Long reservationId) {
-    return null;
-  }
-
+  
   //내 문의 조회
   @GetMapping("/{id}/inquiry")
   public ResponseEntity<?> getInquiryList(@AuthenticationPrincipal Member member, @PathVariable Long id) {
