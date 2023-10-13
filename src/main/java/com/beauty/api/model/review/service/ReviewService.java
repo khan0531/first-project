@@ -46,7 +46,7 @@ public class ReviewService {
           throw new RuntimeException("이미 리뷰를 작성하셨습니다.");
         });
 
-    ReviewEntity reviewEntity = this.reviewRepository.save(reviewInput.toEntity());
+    ReviewEntity reviewEntity = this.reviewRepository.save(reviewInput.toEntity(reservationEntity));
 
     return ReviewResponse.fromEntity(reviewEntity);
   }
