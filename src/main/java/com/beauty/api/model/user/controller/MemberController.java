@@ -123,14 +123,7 @@ public class MemberController {
     ReviewResponse reviewResponse = this.reviewService.updateReview(reviewUpdateRequest);
     return ResponseEntity.ok(reviewResponse);
   }
-
-  //내 예약 삭제
-  @DeleteMapping("/{memberId}/reservation/{reservationId}")
-  public ResponseEntity<?> deleteReservation(@AuthenticationPrincipal Member member, @PathVariable Long memberId,
-      @PathVariable Long reservationId) {
-    return null;
-  }
-
+  
   //내 문의 조회
   @GetMapping("/{id}/inquiry")
   public ResponseEntity<?> getInquiryList(@AuthenticationPrincipal Member member, @PathVariable Long id) {

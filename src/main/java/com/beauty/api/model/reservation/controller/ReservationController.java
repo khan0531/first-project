@@ -46,12 +46,6 @@ public class ReservationController {
     return ResponseEntity.ok(result);
   }
 
-  //예약 취소 -> 수정이랑 합침
-//  @PatchMapping("/{id}/cancel")
-//  public ResponseEntity<?> cancelReservation(@PathVariable String id) {
-//    return null;
-//  }
-
   //예약 상세 조회
   @GetMapping("/{id}")
   public ResponseEntity<?> getReservation(@PathVariable Long id) {
@@ -63,7 +57,7 @@ public class ReservationController {
   @PostMapping("/{id}/review")
   public ResponseEntity<?> writeReview(@AuthenticationPrincipal Member member, @PathVariable Long id,
       @RequestBody ReviewInput reviewInput) {
-    
+
     if (reviewInput.getReservationId() != id) {
       throw new RuntimeException("예약 정보가 일치하지 않습니다.");
     }
