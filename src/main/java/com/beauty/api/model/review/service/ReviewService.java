@@ -4,6 +4,7 @@ import com.beauty.api.model.reservation.persist.entity.ReservationEntity;
 import com.beauty.api.model.reservation.persist.repository.ReservationRepository;
 import com.beauty.api.model.review.dto.ReviewInput;
 import com.beauty.api.model.review.dto.ReviewResponse;
+import com.beauty.api.model.review.dto.ReviewUpdateRequest;
 import com.beauty.api.model.review.persist.entity.ReviewEntity;
 import com.beauty.api.model.review.persist.repository.ReviewRepository;
 import java.time.LocalDateTime;
@@ -47,6 +48,17 @@ public class ReviewService {
         });
 
     ReviewEntity reviewEntity = this.reviewRepository.save(reviewInput.toEntity(reservationEntity));
+
+    return ReviewResponse.fromEntity(reviewEntity);
+  }
+
+  public ReviewResponse updateReview(ReviewUpdateRequest reviewUpdateRequest) {
+    boolean exist = this.reviewRepository.existsById(reviewUpdateRequest.getId());
+    if (!exist) {
+      throw new IllegalArgumentException("해당 리뷰가 존재하지 않습니다.");
+    }
+
+    ReviewEntity reviewEntity = this.reviewRepository.save(reviewUpdateRequest.toEntity());
 
     return ReviewResponse.fromEntity(reviewEntity);
   }
