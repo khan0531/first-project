@@ -63,6 +63,11 @@ public class ReservationController {
   @PostMapping("/{id}/review")
   public ResponseEntity<?> writeReview(@AuthenticationPrincipal Member member, @PathVariable Long id,
       @RequestBody ReviewInput reviewInput) {
+    
+    if (reviewInput.getReservationId() != id) {
+      throw new RuntimeException("예약 정보가 일치하지 않습니다.");
+    }
+
     ReviewResponse reviewResponse = this.reviewService.writeReview(reviewInput);
     return ResponseEntity.ok(reviewResponse);
   }

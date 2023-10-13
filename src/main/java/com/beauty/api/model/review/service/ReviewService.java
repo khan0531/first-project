@@ -1,5 +1,7 @@
 package com.beauty.api.model.review.service;
 
+import com.beauty.api.model.reservation.persist.entity.ReservationEntity;
+import com.beauty.api.model.reservation.persist.repository.ReservationRepository;
 import com.beauty.api.model.review.dto.ReviewInput;
 import com.beauty.api.model.review.dto.ReviewResponse;
 import com.beauty.api.model.review.persist.entity.ReviewEntity;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 public class ReviewService {
 
   private final ReviewRepository reviewRepository;
+
+  private final ReservationRepository reservationRepository;
 
   public ReviewResponse getReview(Long id) {
     ReviewEntity reviewEntity = this.reviewRepository.findById(id)
@@ -33,6 +37,14 @@ public class ReviewService {
         }
       }
     }
+
+    ReservationEntity reservationEntity = this.reservationRepository.findById(reviewInput.getReservationId())
+        .orElseThrow(() -> new RuntimeException("예약 정보가 없습니다."));
+
+    this.reviewRepository.findByReservation(reservationEntity)
+        .ifPresent(reviewEntity -> {
+          throw new RuntimeException("이미 리뷰를 작성하셨습니다.");
+        });
 
     ReviewEntity reviewEntity = this.reviewRepository.save(reviewInput.toEntity());
 
