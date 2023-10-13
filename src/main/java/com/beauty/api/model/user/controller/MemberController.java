@@ -8,6 +8,7 @@ import com.beauty.api.model.review.dto.ReviewResponse;
 import com.beauty.api.model.review.dto.ReviewUpdateRequest;
 import com.beauty.api.model.review.service.ReviewService;
 import com.beauty.api.model.user.dto.Member;
+import com.beauty.api.model.user.dto.MemberResponse;
 import com.beauty.api.model.user.dto.MemberSignInRequest;
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
 import com.beauty.api.model.user.dto.MemberUpdateRequest;
@@ -94,7 +95,8 @@ public class MemberController {
   //회원 정보 조회(내 정보 보기)
   @GetMapping("/{id}")
   public ResponseEntity<?> getUser(@AuthenticationPrincipal Member member, @RequestParam Long id) {
-    return null;
+    MemberResponse memberResponse = this.memberService.getUser(id);
+    return ResponseEntity.ok(memberResponse);
   }
 
   //아이디(이메일) 찾기

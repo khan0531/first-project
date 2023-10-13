@@ -66,4 +66,11 @@ public class MemberService implements UserDetailsService {
 
     this.memberRepository.delete(memberEntity);
   }
+
+  public MemberResponse getUser(Long id) {
+    MemberEntity memberEntity = this.memberRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디 입니다."));
+
+    return MemberResponse.fromEntity(memberEntity);
+  }
 }
