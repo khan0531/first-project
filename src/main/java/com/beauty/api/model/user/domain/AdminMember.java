@@ -1,10 +1,12 @@
 package com.beauty.api.model.user.domain;
 
+import com.beauty.api.model.user.dto.AdminMemberSignUpRequest;
 import com.beauty.api.model.user.dto.constants.Authority;
 import com.beauty.api.model.user.persist.entity.AdminMemberEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -62,6 +64,17 @@ public class AdminMember implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
+  }
+
+  public static AdminMember fromRequest(AdminMemberSignUpRequest adminMemberSignUpRequest) {
+    return AdminMember.builder()
+        .name(adminMemberSignUpRequest.getName())
+        .email(adminMemberSignUpRequest.getEmail())
+        .password(adminMemberSignUpRequest.getPassword())
+        .phone(adminMemberSignUpRequest.getPhone())
+        .roles(Collections.singletonList(Authority.ROLE_USER))
+        .createdAt(LocalDateTime.now())
+        .build();
   }
 
   public static AdminMember fromEntity(AdminMemberEntity adminMemberEntity) {

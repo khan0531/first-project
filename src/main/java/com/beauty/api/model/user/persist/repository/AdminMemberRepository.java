@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface AdminMemberRepository extends JpaRepository<AdminMemberEntity, String> {
 
   Optional<AdminMemberEntity> findByEmail(String email);
+
+  boolean existsByEmail(String email);
 }
