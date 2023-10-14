@@ -1,11 +1,13 @@
 package com.beauty.api.model.user.domain;
 
+import com.beauty.api.model.user.dto.MemberSignUpRequest;
 import com.beauty.api.model.user.dto.constants.Authority;
 import com.beauty.api.model.user.persist.entity.MemberEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -66,6 +68,19 @@ public class Member implements UserDetails {
     return true;
   }
 
+  public static Member fromRequest(MemberSignUpRequest memberSignUpRequest) {
+    return Member.builder()
+        .name(memberSignUpRequest.getName())
+        .email(memberSignUpRequest.getEmail())
+        .password(memberSignUpRequest.getPassword())
+        .phone(memberSignUpRequest.getPhone())
+        .birth(memberSignUpRequest.getBirth())
+        .roles(Collections.singletonList(Authority.ROLE_USER))
+        .createdAt(LocalDateTime.now())
+        .build();
+  }
+
+
   public static Member fromEntity(MemberEntity memberEntity) {
     return Member.builder()
         .id(memberEntity.getId())
@@ -88,8 +103,8 @@ public class Member implements UserDetails {
         .phone(this.phone)
         .birth(this.birth)
         .roles(this.roles)
-        .createdAt(LocalDateTime.now())
-        .updatedAt(LocalDateTime.now())
+        .createdAt(this.createdAt)
+        .updatedAt(this.updatedAt)
         .build();
   }
 }

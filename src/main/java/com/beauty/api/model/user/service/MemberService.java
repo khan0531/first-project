@@ -31,13 +31,14 @@ public class MemberService implements UserDetailsService {
   public MemberResponse signUp(MemberSignUpRequest memberSignUpRequest) {
     boolean exists = this.memberRepository.existsByEmail(memberSignUpRequest.getEmail());
     if (exists) {
-      throw new IllegalArgumentException("이미 존재하는 아이디 입니다.");
+      throw new IllegalArgumentException("이미 가입되어 있는 이메일 입니다.");
     }
 
     memberSignUpRequest.setPassword(this.passwordEncoder.encode(memberSignUpRequest.getPassword()));
-    MemberEntity result = this.memberRepository.save(memberSignUpRequest.toEntity());
 
-    return MemberResponse.fromEntity(result);
+    MemberEntity memberEntity = this.memberRepository.save(Member.fromRequest(memberSignUpRequest).toEntity());
+
+    return MemberResponse.fromEntity(memberEntity);
   }
 
   public MemberEntity signIn(MemberSignInRequest memberSigninReQuest) {

@@ -1,10 +1,6 @@
 package com.beauty.api.model.user.dto;
 
-import com.beauty.api.model.user.dto.constants.Authority;
-import com.beauty.api.model.user.persist.entity.MemberEntity;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collections;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -32,16 +28,4 @@ public class MemberSignUpRequest {
   private String phone;
 
   private LocalDate birth;
-
-  public MemberEntity toEntity() {
-    return MemberEntity.builder()
-        .name(this.name)
-        .email(this.email)
-        .password(this.password)
-        .phone(this.phone)
-        .birth(this.birth)
-        .roles(Collections.singletonList(Authority.ROLE_USER))
-        .createdAt(LocalDateTime.now())
-        .build();
-  }
 }
