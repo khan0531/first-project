@@ -65,11 +65,10 @@ public class MemberController {
 
 
   //회원 정보 수정
-  // TODO
   @PutMapping
-  public ResponseEntity<?> updateUser(@AuthenticationPrincipal Member member,
+  public ResponseEntity<?> updateMember(@AuthenticationPrincipal Member member,
       @RequestBody @Valid MemberUpdateRequest memberUpdateRequest) {
-    var result = this.memberService.updateUser(memberUpdateRequest);
+    var result = this.memberService.updateMember(member, memberUpdateRequest);
     return ResponseEntity.ok(result);
   }
 

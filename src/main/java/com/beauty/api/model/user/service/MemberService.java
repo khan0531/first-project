@@ -52,13 +52,15 @@ public class MemberService implements UserDetailsService {
     return memberEntity;
   }
 
-  public MemberResponse updateUser(MemberUpdateRequest memberUpdateRequest) {
-    MemberEntity memberEntity = this.memberRepository.findByEmail(memberUpdateRequest.getEmail())
+  public MemberResponse updateMember(Member member, MemberUpdateRequest memberUpdateRequest) {
+    MemberEntity memberEntity = this.memberRepository.findById(memberUpdateRequest.getId())
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디 입니다."));
 
-    this.memberRepository.save(memberUpdateRequest.toEntity());
+    if (!memberEntity.getId().equals(member.getId())) {
+      throw new IllegalArgumentException("해당 회원의 정보가 아닙니다.");
+    }
 
-    return MemberResponse.fromEntity(memberEntity);
+    return MemberResponse.fromEntity(this.memberRepository.save(member.update(memberUpdateRequest).toEntity()));
   }
 
   public void deleteUser(Long id) {

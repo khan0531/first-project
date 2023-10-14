@@ -1,6 +1,7 @@
 package com.beauty.api.model.user.domain;
 
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
+import com.beauty.api.model.user.dto.MemberUpdateRequest;
 import com.beauty.api.model.user.dto.constants.Authority;
 import com.beauty.api.model.user.persist.entity.MemberEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -106,5 +107,19 @@ public class Member implements UserDetails {
         .createdAt(this.createdAt)
         .updatedAt(this.updatedAt)
         .build();
+  }
+
+  public Member update(MemberUpdateRequest memberUpdateRequest) {
+    if (memberUpdateRequest.getPhone() != null) {
+      this.phone = memberUpdateRequest.getPhone();
+    }
+
+    if (memberUpdateRequest.getBirth() != null) {
+      this.birth = memberUpdateRequest.getBirth();
+    }
+
+    this.updatedAt = LocalDateTime.now();
+
+    return this;
   }
 }
