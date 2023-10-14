@@ -36,9 +36,9 @@ public class MemberService implements UserDetailsService {
 
     memberSignUpRequest.setPassword(this.passwordEncoder.encode(memberSignUpRequest.getPassword()));
 
-    MemberEntity memberEntity = this.memberRepository.save(Member.fromRequest(memberSignUpRequest).toEntity());
+    Member member = Member.fromRequest(memberSignUpRequest);
 
-    return MemberResponse.fromEntity(memberEntity);
+    return MemberResponse.fromEntity(this.memberRepository.save(member.toEntity()));
   }
 
   public MemberEntity signIn(MemberSignInRequest memberSigninReQuest) {
