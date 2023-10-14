@@ -2,7 +2,9 @@ package com.beauty.api.model.user.service;
 
 import com.beauty.api.model.user.domain.AdminMember;
 import com.beauty.api.model.user.dto.AdminMemberResponse;
+import com.beauty.api.model.user.dto.AdminMemberSignInRequest;
 import com.beauty.api.model.user.dto.AdminMemberSignUpRequest;
+import com.beauty.api.model.user.persist.entity.AdminMemberEntity;
 import com.beauty.api.model.user.persist.repository.AdminMemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,5 +39,16 @@ public class AdminMemberService implements UserDetailsService {
     AdminMember adminMember = AdminMember.fromRequest(adminMemberSignUpRequest);
 
     return AdminMemberResponse.fromEntity(this.adminMemberRepository.save(adminMember.toEntity()));
+  }
+
+  public AdminMemberEntity signIn(AdminMemberSignInRequest adminMemberSignInRequest) {
+    AdminMemberEntity adminMemberEntity = this.adminMemberRepository.findByEmail(adminMemberSignInRequest.getEmail())
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디 입니다."));
+
+    if (!this.passwordEncoder.matches(adminMemberSignInRequest.getPassword(), adminMemberEntity.getPassword())) {
+      throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+    }
+
+    return adminMemberEntity;
   }
 }

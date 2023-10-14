@@ -1,5 +1,7 @@
 package com.beauty.api.security;
 
+import com.beauty.api.model.user.dto.constants.Authority;
+import com.beauty.api.model.user.service.AdminMemberService;
 import com.beauty.api.model.user.service.MemberService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -24,6 +26,8 @@ public class TokenProvider {
 
   private final MemberService memberService;
 
+  private final AdminMemberService adminMemberService;
+
   @Value("${jwt.secret}")
   private String secretKey;
 
@@ -35,7 +39,7 @@ public class TokenProvider {
     //      - 만료 시간
     //      - signature
     Claims claims = Jwts.claims().setSubject(username);
-    claims.put(KEY_ROLES, roles);
+    claims.put(KEY_ROLES, roles.get(0));
 
     var now = new Date();
     var expireDate = new Date(now.getTime() + TOKEN_EXPIRE_TIME); //토큰 생성 후 한시간 유효하다.
@@ -51,7 +55,14 @@ public class TokenProvider {
 
   @Transactional
   public Authentication getAuthentication(String jwt) {
-    UserDetails userDetails = this.memberService.loadUserByUsername(this.getUsername(jwt));
+    Jws<Claims> claims = Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(jwt);
+    String role = claims.getBody().get("roles", String.class);
+    UserDetails userDetails;
+    if (role.equals(Authority.ROLE_ADMIN.name())) {
+      userDetails = this.adminMemberService.loadUserByUsername(this.getUsername(jwt));
+    } else {
+      userDetails = this.memberService.loadUserByUsername(this.getUsername(jwt));
+    }
     return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
   }
 
