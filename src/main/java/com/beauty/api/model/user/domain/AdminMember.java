@@ -1,8 +1,9 @@
-package com.beauty.api.model.user.dto;
+package com.beauty.api.model.user.domain;
 
 import com.beauty.api.model.user.dto.constants.Authority;
 import com.beauty.api.model.user.persist.entity.AdminMemberEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,9 +21,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 public class AdminMember implements UserDetails {
 
+  private Long id;
+  private String name;
   private String email;
-  private List<Authority> roles;
   private String password;
+  private String phone;
+  private List<Authority> roles;
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
 
   @Override
   @JsonIgnore
@@ -60,9 +66,26 @@ public class AdminMember implements UserDetails {
 
   public static AdminMember fromEntity(AdminMemberEntity adminMemberEntity) {
     return AdminMember.builder()
+        .id(adminMemberEntity.getId())
+        .name(adminMemberEntity.getName())
         .email(adminMemberEntity.getEmail())
-        .roles(adminMemberEntity.getRoles())
         .password(adminMemberEntity.getPassword())
+        .phone(adminMemberEntity.getPhone())
+        .roles(adminMemberEntity.getRoles())
+        .createdAt(adminMemberEntity.getCreatedAt())
+        .updatedAt(adminMemberEntity.getUpdatedAt())
+        .build();
+  }
+
+  public AdminMemberEntity toEntity() {
+    return AdminMemberEntity.builder()
+        .name(this.name)
+        .email(this.email)
+        .password(this.password)
+        .phone(this.phone)
+        .roles(this.roles)
+        .createdAt(LocalDateTime.now())
+        .updatedAt(LocalDateTime.now())
         .build();
   }
 }

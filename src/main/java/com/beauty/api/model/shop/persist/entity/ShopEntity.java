@@ -1,6 +1,7 @@
 package com.beauty.api.model.shop.persist.entity;
 
 import com.beauty.api.model.shop.dto.constants.CosmeticType;
+import com.beauty.api.model.user.persist.entity.AdminMemberEntity;
 import java.time.LocalDateTime;
 import java.util.Set;
 import javax.persistence.ElementCollection;
@@ -11,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +30,9 @@ public class ShopEntity {
   private Long id;
 
   private String name;
+
+  @ManyToOne
+  private AdminMemberEntity adminMember;
 
   private String address;
 

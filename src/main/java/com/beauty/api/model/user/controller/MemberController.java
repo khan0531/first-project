@@ -1,13 +1,9 @@
 package com.beauty.api.model.user.controller;
 
-import com.beauty.api.model.inquiry.dto.InquiryResponse;
-import com.beauty.api.model.inquiry.dto.InquiryUpdateRequest;
 import com.beauty.api.model.inquiry.service.InquiryService;
 import com.beauty.api.model.reservation.service.ReservationService;
-import com.beauty.api.model.review.dto.ReviewResponse;
-import com.beauty.api.model.review.dto.ReviewUpdateRequest;
 import com.beauty.api.model.review.service.ReviewService;
-import com.beauty.api.model.user.dto.Member;
+import com.beauty.api.model.user.domain.Member;
 import com.beauty.api.model.user.dto.MemberResponse;
 import com.beauty.api.model.user.dto.MemberSignInRequest;
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
@@ -123,25 +119,10 @@ public class MemberController {
     return null;
   }
 
-  //내 예약에 대한 리뷰 수정
-  @PatchMapping("/{memberId}/review/{reviewId}")
-  public ResponseEntity<?> updateReview(@AuthenticationPrincipal Member member, @PathVariable Long memberId,
-      @PathVariable Long reviewId, @RequestBody ReviewUpdateRequest reviewUpdateRequest) {
-    ReviewResponse reviewResponse = this.reviewService.updateReview(reviewUpdateRequest);
-    return ResponseEntity.ok(reviewResponse);
-  }
 
   //내 문의 조회
   @GetMapping("/{id}/inquiry")
   public ResponseEntity<?> getInquiryList(@AuthenticationPrincipal Member member, @PathVariable Long id) {
     return null;
-  }
-
-  //내 문의 수정
-  @PatchMapping("/{memberId}/inquiry/{inquiryId}")
-  public ResponseEntity<?> updateInquiry(@AuthenticationPrincipal Member member, @PathVariable Long inquiryId,
-      @PathVariable Long memberId, @RequestBody InquiryUpdateRequest inquiryUpdateRequest) {
-    InquiryResponse inquiryResponse = this.inquiryService.updateInquiry(inquiryUpdateRequest);
-    return ResponseEntity.ok(inquiryResponse);
   }
 }

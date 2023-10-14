@@ -1,6 +1,6 @@
 package com.beauty.api.model.user.service;
 
-import com.beauty.api.model.user.dto.AdminMember;
+import com.beauty.api.model.user.domain.AdminMember;
 import com.beauty.api.model.user.persist.repository.AdminMemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

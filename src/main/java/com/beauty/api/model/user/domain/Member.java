@@ -1,8 +1,10 @@
-package com.beauty.api.model.user.dto;
+package com.beauty.api.model.user.domain;
 
 import com.beauty.api.model.user.dto.constants.Authority;
 import com.beauty.api.model.user.persist.entity.MemberEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,9 +23,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class Member implements UserDetails {
 
   private Long id;
+  private String name;
   private String email;
-  private List<Authority> roles;
   private String password;
+  private String phone;
+  private LocalDate birth;
+  private List<Authority> roles;
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
 
   @Override
   @JsonIgnore
@@ -62,9 +69,27 @@ public class Member implements UserDetails {
   public static Member fromEntity(MemberEntity memberEntity) {
     return Member.builder()
         .id(memberEntity.getId())
+        .name(memberEntity.getName())
         .email(memberEntity.getEmail())
-        .roles(memberEntity.getRoles())
         .password(memberEntity.getPassword())
+        .phone(memberEntity.getPhone())
+        .birth(memberEntity.getBirth())
+        .roles(memberEntity.getRoles())
+        .createdAt(memberEntity.getCreatedAt())
+        .updatedAt(memberEntity.getUpdatedAt())
+        .build();
+  }
+
+  public MemberEntity toEntity() {
+    return MemberEntity.builder()
+        .name(this.name)
+        .email(this.email)
+        .password(this.password)
+        .phone(this.phone)
+        .birth(this.birth)
+        .roles(this.roles)
+        .createdAt(LocalDateTime.now())
+        .updatedAt(LocalDateTime.now())
         .build();
   }
 }

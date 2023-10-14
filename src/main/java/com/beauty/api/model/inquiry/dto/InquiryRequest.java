@@ -1,4 +1,4 @@
-package com.beauty.api.model.review.dto;
+package com.beauty.api.model.inquiry.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewUpdateRequest {
+public class InquiryRequest {
 
-  private Long id;
+  private Long shopId;
+
+  private Long memberId;
+
   private String title;
+
   private String content;
+
   private String image;
-  private Long rating;
 }

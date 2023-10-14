@@ -1,6 +1,6 @@
 package com.beauty.api.model.user.service;
 
-import com.beauty.api.model.user.dto.Member;
+import com.beauty.api.model.user.domain.Member;
 import com.beauty.api.model.user.dto.MemberResponse;
 import com.beauty.api.model.user.dto.MemberSignInRequest;
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
