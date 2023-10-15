@@ -7,6 +7,7 @@ import com.beauty.api.model.user.domain.Member;
 import com.beauty.api.model.user.dto.MemberResponse;
 import com.beauty.api.model.user.dto.MemberSignInRequest;
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
+import com.beauty.api.model.user.dto.MemberUpdatePassword;
 import com.beauty.api.model.user.dto.MemberUpdateRequest;
 import com.beauty.api.model.user.service.MemberService;
 import com.beauty.api.security.TokenProvider;
@@ -73,9 +74,14 @@ public class MemberController {
   }
 
   //비밀번호 수정
-  @PatchMapping("/password")
-  public ResponseEntity<?> updatePassword(@AuthenticationPrincipal Member member) {
-    return null;
+  @PatchMapping("/{id}/password")
+  public ResponseEntity<?> updatePassword(@AuthenticationPrincipal Member member,
+      @RequestBody MemberUpdatePassword memberUpdatePassword, @PathVariable Long id) {
+    if (!member.getId().equals(id)) {
+      throw new IllegalArgumentException("해당 회원의 정보가 아닙니다.");
+    }
+    MemberResponse result = this.memberService.updatePassword(member, memberUpdatePassword);
+    return ResponseEntity.ok(result);
   }
 
   //회원 탈퇴

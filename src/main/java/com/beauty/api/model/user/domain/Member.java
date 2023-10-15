@@ -1,6 +1,7 @@
 package com.beauty.api.model.user.domain;
 
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
+import com.beauty.api.model.user.dto.MemberUpdatePassword;
 import com.beauty.api.model.user.dto.MemberUpdateRequest;
 import com.beauty.api.model.user.dto.constants.Authority;
 import com.beauty.api.model.user.persist.entity.MemberEntity;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Data
 @Builder
@@ -34,6 +36,8 @@ public class Member implements UserDetails {
   private List<Authority> roles;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
+
+  private PasswordEncoder passwordEncoder;
 
   @Override
   @JsonIgnore
@@ -118,6 +122,13 @@ public class Member implements UserDetails {
       this.birth = memberUpdateRequest.getBirth();
     }
 
+    this.updatedAt = LocalDateTime.now();
+
+    return this;
+  }
+
+  public Member updatePassword(MemberUpdatePassword memberUpdatePassword) {
+    this.password = this.passwordEncoder.encode(memberUpdatePassword.getNewPassword());
     this.updatedAt = LocalDateTime.now();
 
     return this;

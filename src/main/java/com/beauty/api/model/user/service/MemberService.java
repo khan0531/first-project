@@ -4,6 +4,7 @@ import com.beauty.api.model.user.domain.Member;
 import com.beauty.api.model.user.dto.MemberResponse;
 import com.beauty.api.model.user.dto.MemberSignInRequest;
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
+import com.beauty.api.model.user.dto.MemberUpdatePassword;
 import com.beauty.api.model.user.dto.MemberUpdateRequest;
 import com.beauty.api.model.user.persist.entity.MemberEntity;
 import com.beauty.api.model.user.persist.repository.MemberRepository;
@@ -82,5 +83,20 @@ public class MemberService implements UserDetailsService {
       throw new IllegalArgumentException("해당 회원의 정보가 아닙니다.");
     }
     return MemberResponse.fromEntity(memberEntity);
+  }
+
+  public MemberResponse updatePassword(Member member, MemberUpdatePassword memberUpdatePassword) {
+    MemberEntity memberEntity = this.memberRepository.findById(memberUpdatePassword.getId())
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디 입니다."));
+
+    if (!memberEntity.getId().equals(member.getId())) {
+      throw new IllegalArgumentException("해당 회원의 정보가 아닙니다.");
+    }
+
+    if (!this.passwordEncoder.matches(memberUpdatePassword.getPassword(), memberEntity.getPassword())) {
+      throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+    }
+
+    return MemberResponse.fromEntity(member.updatePassword(memberUpdatePassword).toEntity());
   }
 }
