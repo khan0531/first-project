@@ -4,6 +4,7 @@ import com.beauty.api.model.user.domain.AdminMember;
 import com.beauty.api.model.user.dto.AdminMemberResponse;
 import com.beauty.api.model.user.dto.AdminMemberSignInRequest;
 import com.beauty.api.model.user.dto.AdminMemberSignUpRequest;
+import com.beauty.api.model.user.dto.AdminMemberUpdatePassword;
 import com.beauty.api.model.user.dto.AdminMemberUpdateRequest;
 import com.beauty.api.model.user.persist.entity.AdminMemberEntity;
 import com.beauty.api.model.user.persist.repository.AdminMemberRepository;
@@ -85,5 +86,19 @@ public class AdminMemberService implements UserDetailsService {
       throw new IllegalArgumentException("해당 회원의 정보가 아닙니다.");
     }
     return AdminMemberResponse.fromEntity(adminMemberEntity);
+  }
+
+  public AdminMemberResponse updatePassword(AdminMember adminMember,
+      AdminMemberUpdatePassword adminMemberUpdatePassword) {
+    AdminMemberEntity adminMemberEntity = this.adminMemberRepository.findById(adminMemberUpdatePassword.getId())
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디 입니다."));
+    if (!adminMemberEntity.getId().equals(adminMember.getId())) {
+      throw new IllegalArgumentException("해당 회원의 정보가 아닙니다.");
+    }
+    if (!this.passwordEncoder.matches(adminMemberUpdatePassword.getPassword(), adminMemberEntity.getPassword())) {
+      throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+    }
+    adminMember.setPassword(this.passwordEncoder.encode(adminMemberUpdatePassword.getNewPassword()));
+    return AdminMemberResponse.fromEntity(this.adminMemberRepository.save(adminMember.toEntity()));
   }
 }

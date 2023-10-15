@@ -96,7 +96,7 @@ public class MemberService implements UserDetailsService {
     if (!this.passwordEncoder.matches(memberUpdatePassword.getPassword(), memberEntity.getPassword())) {
       throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
     }
-
-    return MemberResponse.fromEntity(member.updatePassword(memberUpdatePassword).toEntity());
+    member.setPassword(this.passwordEncoder.encode(memberUpdatePassword.getNewPassword()));
+    return MemberResponse.fromEntity(this.memberRepository.save(member.toEntity()));
   }
 }
