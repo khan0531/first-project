@@ -1,6 +1,7 @@
 package com.beauty.api.model.user.service;
 
 import com.beauty.api.model.user.domain.Member;
+import com.beauty.api.model.user.dto.MemberFindEmail;
 import com.beauty.api.model.user.dto.MemberResponse;
 import com.beauty.api.model.user.dto.MemberSignInRequest;
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
@@ -98,5 +99,12 @@ public class MemberService implements UserDetailsService {
     }
     member.setPassword(this.passwordEncoder.encode(memberUpdatePassword.getNewPassword()));
     return MemberResponse.fromEntity(this.memberRepository.save(member.toEntity()));
+  }
+
+  public MemberResponse findEmail(MemberFindEmail memberFindEmail) {
+    MemberEntity memberEntity = this.memberRepository.findByNameAndPhone(memberFindEmail.getName(),
+        memberFindEmail.getPhone()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+    return MemberResponse.fromEntity(memberEntity);
   }
 }

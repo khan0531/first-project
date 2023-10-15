@@ -1,6 +1,7 @@
 package com.beauty.api.model.user.controller;
 
 import com.beauty.api.model.user.domain.AdminMember;
+import com.beauty.api.model.user.dto.AdminMemberFindEmail;
 import com.beauty.api.model.user.dto.AdminMemberResponse;
 import com.beauty.api.model.user.dto.AdminMemberSignInRequest;
 import com.beauty.api.model.user.dto.AdminMemberSignUpRequest;
@@ -73,6 +74,13 @@ public class AdminMemberController {
       throw new IllegalArgumentException("해당 회원의 정보가 아닙니다.");
     }
     AdminMemberResponse result = this.adminMemberService.updatePassword(adminMember, adminMemberUpdatePassword);
+    return ResponseEntity.ok(result);
+  }
+
+  //아이디(이메일) 찾기
+  @GetMapping("/email")
+  public ResponseEntity<?> findEmail(@RequestBody AdminMemberFindEmail adminMemberFindEmail) {
+    AdminMemberResponse result = this.adminMemberService.findEmail(adminMemberFindEmail);
     return ResponseEntity.ok(result);
   }
 

@@ -1,6 +1,7 @@
 package com.beauty.api.model.user.service;
 
 import com.beauty.api.model.user.domain.AdminMember;
+import com.beauty.api.model.user.dto.AdminMemberFindEmail;
 import com.beauty.api.model.user.dto.AdminMemberResponse;
 import com.beauty.api.model.user.dto.AdminMemberSignInRequest;
 import com.beauty.api.model.user.dto.AdminMemberSignUpRequest;
@@ -100,5 +101,13 @@ public class AdminMemberService implements UserDetailsService {
     }
     adminMember.setPassword(this.passwordEncoder.encode(adminMemberUpdatePassword.getNewPassword()));
     return AdminMemberResponse.fromEntity(this.adminMemberRepository.save(adminMember.toEntity()));
+  }
+
+  public AdminMemberResponse findEmail(AdminMemberFindEmail adminMemberFindEmail) {
+    AdminMemberEntity adminMemberEntity = this.adminMemberRepository
+        .findByNameAndName(adminMemberFindEmail.getName(), adminMemberFindEmail.getName())
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원 정보 입니다."));
+
+    return AdminMemberResponse.fromEntity(adminMemberEntity);
   }
 }

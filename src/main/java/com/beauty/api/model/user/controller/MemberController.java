@@ -4,6 +4,7 @@ import com.beauty.api.model.inquiry.service.InquiryService;
 import com.beauty.api.model.reservation.service.ReservationService;
 import com.beauty.api.model.review.service.ReviewService;
 import com.beauty.api.model.user.domain.Member;
+import com.beauty.api.model.user.dto.MemberFindEmail;
 import com.beauty.api.model.user.dto.MemberResponse;
 import com.beauty.api.model.user.dto.MemberSignInRequest;
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
@@ -102,8 +103,9 @@ public class MemberController {
 
   //아이디(이메일) 찾기
   @GetMapping("/email")
-  public ResponseEntity<?> findEmail() {
-    return null;
+  public ResponseEntity<?> findEmail(@RequestBody MemberFindEmail memberFindEmail) {
+    MemberResponse result = this.memberService.findEmail(memberFindEmail);
+    return ResponseEntity.ok(result);
   }
 
   //비밀번호 찾기(재설정)
