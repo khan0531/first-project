@@ -80,9 +80,9 @@ public class MemberController {
 
   //회원 탈퇴
   @DeleteMapping
-  public ResponseEntity<?> deleteUser(@AuthenticationPrincipal Member member, @RequestParam Long id) {
+  public ResponseEntity<?> deleteMember(@AuthenticationPrincipal Member member, @RequestParam Long id) {
 
-    this.memberService.deleteUser(id);
+    this.memberService.deleteMember(member, id);
 
     return ResponseEntity.ok().build();
   }

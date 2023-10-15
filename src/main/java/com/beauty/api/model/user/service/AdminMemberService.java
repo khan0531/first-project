@@ -65,4 +65,15 @@ public class AdminMemberService implements UserDetailsService {
     return AdminMemberResponse.fromEntity(
         this.adminMemberRepository.save(adminMember.update(adminMemberUpdateRequest).toEntity()));
   }
+
+  public void deleteAdminMember(AdminMember adminMember, Long id) {
+    AdminMemberEntity adminMemberEntity = this.adminMemberRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디 입니다."));
+
+    if (!adminMember.getId().equals(id)) {
+      throw new IllegalArgumentException("해당 회원의 정보가 아닙니다.");
+    }
+
+    this.adminMemberRepository.delete(adminMemberEntity);
+  }
 }

@@ -63,9 +63,13 @@ public class MemberService implements UserDetailsService {
     return MemberResponse.fromEntity(this.memberRepository.save(member.update(memberUpdateRequest).toEntity()));
   }
 
-  public void deleteUser(Long id) {
+  public void deleteMember(Member member, Long id) {
     MemberEntity memberEntity = this.memberRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디 입니다."));
+
+    if (!member.getId().equals(id)) {
+      throw new IllegalArgumentException("해당 회원의 정보가 아닙니다.");
+    }
 
     this.memberRepository.delete(memberEntity);
   }

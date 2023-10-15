@@ -63,8 +63,9 @@ public class AdminMemberController {
 
   //회원 탈퇴
   @DeleteMapping
-  public ResponseEntity<?> deleteUser() {
-    return null;
+  public ResponseEntity<?> deleteUser(@AuthenticationPrincipal AdminMember adminMember, Long id) {
+    this.adminMemberService.deleteAdminMember(adminMember, id);
+    return ResponseEntity.ok().build();
   }
 
 
