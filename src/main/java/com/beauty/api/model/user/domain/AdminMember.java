@@ -1,6 +1,7 @@
 package com.beauty.api.model.user.domain;
 
 import com.beauty.api.model.user.dto.AdminMemberSignUpRequest;
+import com.beauty.api.model.user.dto.AdminMemberUpdateRequest;
 import com.beauty.api.model.user.dto.constants.Authority;
 import com.beauty.api.model.user.persist.entity.AdminMemberEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -100,5 +101,16 @@ public class AdminMember implements UserDetails {
         .createdAt(LocalDateTime.now())
         .updatedAt(LocalDateTime.now())
         .build();
+  }
+
+  public AdminMember update(AdminMemberUpdateRequest adminMemberUpdateRequest) {
+
+    if (adminMemberUpdateRequest.getPhone() != null) {
+      this.phone = adminMemberUpdateRequest.getPhone();
+    }
+
+    this.updatedAt = LocalDateTime.now();
+
+    return this;
   }
 }

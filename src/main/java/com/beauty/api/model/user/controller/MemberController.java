@@ -68,7 +68,7 @@ public class MemberController {
   @PutMapping
   public ResponseEntity<?> updateMember(@AuthenticationPrincipal Member member,
       @RequestBody @Valid MemberUpdateRequest memberUpdateRequest) {
-    var result = this.memberService.updateMember(member, memberUpdateRequest);
+    MemberResponse result = this.memberService.updateMember(member, memberUpdateRequest);
     return ResponseEntity.ok(result);
   }
 

@@ -4,6 +4,7 @@ import com.beauty.api.model.user.domain.AdminMember;
 import com.beauty.api.model.user.dto.AdminMemberResponse;
 import com.beauty.api.model.user.dto.AdminMemberSignInRequest;
 import com.beauty.api.model.user.dto.AdminMemberSignUpRequest;
+import com.beauty.api.model.user.dto.AdminMemberUpdateRequest;
 import com.beauty.api.model.user.persist.entity.AdminMemberEntity;
 import com.beauty.api.model.user.service.AdminMemberService;
 import com.beauty.api.security.TokenProvider;
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,8 +55,10 @@ public class AdminMemberController {
 
   //회원 정보 수정
   @PatchMapping
-  public ResponseEntity<?> updateUser() {
-    return null;
+  public ResponseEntity<?> updateAdminMember(@AuthenticationPrincipal AdminMember adminMember,
+      @RequestBody AdminMemberUpdateRequest adminMemberUpdateRequest) {
+    AdminMemberResponse result = this.adminMemberService.updateAdminMember(adminMember, adminMemberUpdateRequest);
+    return ResponseEntity.ok(result);
   }
 
   //회원 탈퇴
