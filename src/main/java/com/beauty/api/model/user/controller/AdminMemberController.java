@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,6 +67,13 @@ public class AdminMemberController {
   public ResponseEntity<?> deleteUser(@AuthenticationPrincipal AdminMember adminMember, Long id) {
     this.adminMemberService.deleteAdminMember(adminMember, id);
     return ResponseEntity.ok().build();
+  }
+
+  //회원 정보 조회
+  @GetMapping("/{id}")
+  public ResponseEntity<?> getAdminMember(@AuthenticationPrincipal AdminMember adminMember, Long id) {
+    AdminMemberResponse result = this.adminMemberService.getAdminMember(adminMember, id);
+    return ResponseEntity.ok(result);
   }
 
 

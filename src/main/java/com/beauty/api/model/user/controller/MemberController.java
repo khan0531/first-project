@@ -89,8 +89,8 @@ public class MemberController {
 
   //회원 정보 조회(내 정보 보기)
   @GetMapping("/{id}")
-  public ResponseEntity<?> getUser(@AuthenticationPrincipal Member member, @RequestParam Long id) {
-    MemberResponse memberResponse = this.memberService.getUser(id);
+  public ResponseEntity<?> getMember(@AuthenticationPrincipal Member member, @RequestParam Long id) {
+    MemberResponse memberResponse = this.memberService.getMember(member, id);
     return ResponseEntity.ok(memberResponse);
   }
 
