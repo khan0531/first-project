@@ -98,5 +98,4 @@ public class AdminMemberController {
     return ResponseEntity.ok(result);
   }
 
-
 }

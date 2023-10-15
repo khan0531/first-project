@@ -4,6 +4,7 @@ import com.beauty.api.model.review.dto.ReviewResponse;
 import com.beauty.api.model.review.dto.ReviewUpdateRequest;
 import com.beauty.api.model.review.service.ReviewService;
 import com.beauty.api.model.user.domain.Member;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class ReviewController {
   public ResponseEntity<?> updateReview(@AuthenticationPrincipal Member member,
       @PathVariable Long reviewId, @RequestBody ReviewUpdateRequest reviewUpdateRequest) {
 
-    if (reviewId != reviewUpdateRequest.getId()) {
+    if (!Objects.equals(reviewId, reviewUpdateRequest.getId())) {
       return ResponseEntity.badRequest().build();
     }
 
