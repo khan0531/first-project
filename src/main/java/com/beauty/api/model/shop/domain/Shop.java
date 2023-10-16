@@ -7,6 +7,7 @@ import com.beauty.api.model.shop.dto.constants.CosmeticType;
 import com.beauty.api.model.shop.persist.entity.ShopEntity;
 import com.beauty.api.model.user.domain.AdminMember;
 import com.beauty.api.model.user.persist.entity.AdminMemberEntity;
+import com.beauty.api.utilities.geocoding.dto.LatLng;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -38,6 +39,11 @@ public class Shop {
   private List<Reservation> reservations;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
+
+  public void setLatLng(LatLng latLng) {
+    this.latitude = latLng.getLat();
+    this.longitude = latLng.getLng();
+  }
 
   public static Shop fromRequest(ShopRequest shopRequest, AdminMemberEntity adminMemberEntity) {
     return Shop.builder()

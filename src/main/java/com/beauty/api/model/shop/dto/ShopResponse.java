@@ -30,9 +30,7 @@ public class ShopResponse {
         .openTime(shopEntity.getOpenTime())
         .closeTime(shopEntity.getCloseTime())
         .description(shopEntity.getDescription())
-        .rating(
-            Math.round((shopEntity.getRatingSum().doubleValue() / shopEntity.getReviewCount().doubleValue()) * 100.0)
-                / 100.0) // 소수점 둘째 자리에서 반올림
+        .rating(0.0) // 소수점 둘째 자리에서 반올림
         .reviewCount(shopEntity.getReviewCount())
         .build();
   }

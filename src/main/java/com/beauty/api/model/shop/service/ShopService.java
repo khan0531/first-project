@@ -9,6 +9,8 @@ import com.beauty.api.model.shop.persist.repository.ShopRepository;
 import com.beauty.api.model.user.domain.AdminMember;
 import com.beauty.api.model.user.persist.entity.AdminMemberEntity;
 import com.beauty.api.model.user.persist.repository.AdminMemberRepository;
+import com.beauty.api.utilities.geocoding.GeocodingUtils;
+import com.beauty.api.utilities.geocoding.dto.LatLng;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class ShopService {
 
+  private final GeocodingUtils geocodingUtils;
   private final ShopRepository shopRepository;
   private final AdminMemberRepository adminMemberRepository;
 
@@ -35,6 +38,8 @@ public class ShopService {
     }
 
     Shop shop = Shop.fromRequest(shopRequest, adminMemberEntity);
+    LatLng latLng = geocodingUtils.getLatLng(shop.getAddress());
+    shop.setLatLng(latLng);
 
     ShopEntity shopEntity = this.shopRepository.save(shop.toEntity(adminMemberEntity));
 
