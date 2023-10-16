@@ -1,7 +1,6 @@
 package com.beauty.api.model.user.domain;
 
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
-import com.beauty.api.model.user.dto.MemberUpdatePassword;
 import com.beauty.api.model.user.dto.MemberUpdateRequest;
 import com.beauty.api.model.user.dto.constants.Authority;
 import com.beauty.api.model.user.persist.entity.MemberEntity;
@@ -122,13 +121,6 @@ public class Member implements UserDetails {
       this.birth = memberUpdateRequest.getBirth();
     }
 
-    this.updatedAt = LocalDateTime.now();
-
-    return this;
-  }
-
-  public Member updatePassword(MemberUpdatePassword memberUpdatePassword) {
-    this.password = this.passwordEncoder.encode(memberUpdatePassword.getNewPassword());
     this.updatedAt = LocalDateTime.now();
 
     return this;
