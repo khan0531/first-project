@@ -33,18 +33,24 @@ public class InquiryController {
   }
 
   //내 문의 수정
-  @PatchMapping("/inquiry/{inquiryId}")
-  public ResponseEntity<?> updateInquiry(@AuthenticationPrincipal Member member, @PathVariable Long inquiryId,
+  @PatchMapping("/{id}")
+  public ResponseEntity<?> updateInquiry(@AuthenticationPrincipal Member member, @PathVariable Long id,
       @RequestBody InquiryUpdateRequest inquiryUpdateRequest) {
+    if (!inquiryUpdateRequest.getId().equals(id)) {
+      throw new RuntimeException("해당 문의가 존재하지 않습니다.");
+    }
+
     InquiryResponse inquiryResponse = this.inquiryService.updateInquiry(member, inquiryUpdateRequest);
     return ResponseEntity.ok(inquiryResponse);
   }
 
   //문의 등록
-  @PostMapping("/inquiry")
+  @PostMapping
   public ResponseEntity<?> writeInquiry(@AuthenticationPrincipal Member member,
       @RequestBody InquiryRequest inquiryRequest) {
-
+    if (!inquiryRequest.getMemberId().equals(member.getId())) {
+      throw new RuntimeException("해당 문의를 작성할 권한이 없습니다.");
+    }
     InquiryResponse inquiryResponse = this.inquiryService.writeInquiry(inquiryRequest);
     return ResponseEntity.ok(inquiryResponse);
   }

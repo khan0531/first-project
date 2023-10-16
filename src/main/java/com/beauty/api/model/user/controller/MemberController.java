@@ -57,10 +57,7 @@ public class MemberController {
     var memberEntity = this.memberService.signIn(memberSignInRequest);
     Member member = Member.fromEntity(memberEntity);
 
-    String token = this.tokenProvider.generateToken(
-        member.getUsername(),
-        member.getRoles().stream().map(Enum::name).collect(java.util.stream.Collectors.toList())
-    );
+    String token = this.tokenProvider.generateToken(member);
     log.info("user login -> " + memberSignInRequest.getEmail());
     return ResponseEntity.ok(token);
   }

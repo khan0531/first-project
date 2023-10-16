@@ -41,7 +41,7 @@ public class ReviewService {
         });
 
     ReviewEntity reviewEntity = this.reviewRepository.save(
-        Review.fromRequest(reviewRequest, reservationEntity).toEntity());
+        Review.fromRequest(reviewRequest, reservationEntity).toEntity(reservationEntity));
 
     return ReviewResponse.fromEntity(reviewEntity);
   }
@@ -50,12 +50,16 @@ public class ReviewService {
     ReviewEntity reviewEntity = this.reviewRepository.findById(reviewUpdateRequest.getId())
         .orElseThrow(() -> new RuntimeException("해당 리뷰가 존재하지 않습니다."));
 
+    ReservationEntity reservationEntity = this.reservationRepository.findById(reviewEntity.getReservation().getId())
+        .orElseThrow(() -> new RuntimeException("예약 정보가 없습니다."));
+
     Review review = Review.fromEntity(reviewEntity);
 
     if (!review.isWrittenBy(member)) {
       throw new RuntimeException("해당 리뷰를 수정할 권한이 없습니다.");
     }
 
-    return ReviewResponse.fromEntity(this.reviewRepository.save(review.update(reviewUpdateRequest).toEntity()));
+    return ReviewResponse.fromEntity(
+        this.reviewRepository.save(review.update(reviewUpdateRequest).toEntity(reservationEntity)));
   }
 }

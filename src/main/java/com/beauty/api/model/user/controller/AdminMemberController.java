@@ -47,10 +47,7 @@ public class AdminMemberController {
     AdminMemberEntity adminMemberEntity = this.adminMemberService.signIn(adminMemberSignInRequest);
     AdminMember adminMember = AdminMember.fromEntity(adminMemberEntity);
 
-    String token = this.tokenProvider.generateToken(
-        adminMember.getUsername(),
-        adminMember.getRoles().stream().map(Enum::name).collect(java.util.stream.Collectors.toList())
-    );
+    String token = this.tokenProvider.generateToken(adminMember);
 
     log.info("user login -> " + adminMemberSignInRequest.getEmail());
 

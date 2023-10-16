@@ -5,7 +5,6 @@ import com.beauty.api.model.review.dto.ReviewResponse;
 import com.beauty.api.model.review.dto.ReviewUpdateRequest;
 import com.beauty.api.model.review.service.ReviewService;
 import com.beauty.api.model.user.domain.Member;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -42,11 +41,11 @@ public class ReviewController {
   }
 
   //내 예약에 대한 리뷰 수정
-  @PatchMapping("/review/{reviewId}")
+  @PatchMapping("/{id}")
   public ResponseEntity<?> updateReview(@AuthenticationPrincipal Member member,
-      @PathVariable Long reviewId, @RequestBody ReviewUpdateRequest reviewUpdateRequest) {
+      @PathVariable Long id, @RequestBody ReviewUpdateRequest reviewUpdateRequest) {
 
-    if (!Objects.equals(reviewId, reviewUpdateRequest.getId())) {
+    if (!reviewUpdateRequest.getId().equals(id)) {
       return ResponseEntity.badRequest().build();
     }
 

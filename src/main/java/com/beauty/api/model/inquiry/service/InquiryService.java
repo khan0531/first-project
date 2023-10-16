@@ -35,6 +35,12 @@ public class InquiryService {
         }
       }
     }
+//    위 로직과 동치
+//    if (this.inquiryRepository.findByTitleAndContent(inquiryRequest.getTitle(), inquiryRequest.getContent())
+//        .stream()
+//        .anyMatch(inquiryEntity -> inquiryEntity.getCreatedAt().isAfter(LocalDateTime.now().minusSeconds(30)))) {
+//      throw new RuntimeException("30초 이내에 같은 제목, 같은 내용의 문의를 작성할 수 없습니다.");
+//    }
 
     ShopEntity shopEntity = this.shopRepository.findById(inquiryRequest.getShopId())
         .orElseThrow(() -> new RuntimeException("존재하지 않는 가게입니다."));
@@ -43,7 +49,7 @@ public class InquiryService {
         .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
     InquiryEntity inquiryEntity = this.inquiryRepository.save(
-        Inquiry.fromRequest(inquiryRequest, memberEntity, shopEntity).toEntity());
+        Inquiry.fromRequest(inquiryRequest, memberEntity, shopEntity).toEntity(shopEntity, memberEntity));
 
     return InquiryResponse.fromEntity(inquiryEntity);
   }
@@ -53,12 +59,17 @@ public class InquiryService {
         .orElseThrow(() -> new RuntimeException("존재하지 않는 문의입니다."));
 
     Inquiry inquiry = Inquiry.fromEntity(inquiryEntity);
+    ShopEntity shopEntity = this.shopRepository.findById(inquiry.getShop().getId())
+        .orElseThrow(() -> new RuntimeException("존재하지 않는 가게입니다."));
+    MemberEntity memberEntity = this.memberRepository.findById(inquiry.getMember().getId())
+        .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
     if (!inquiry.isWrittenBy(member)) {
       throw new RuntimeException("해당 문의를 수정할 권한이 없습니다.");
     }
 
-    return InquiryResponse.fromEntity(this.inquiryRepository.save(inquiry.update(inquiryUpdateRequest).toEntity()));
+    return InquiryResponse.fromEntity(
+        this.inquiryRepository.save(inquiry.update(inquiryUpdateRequest).toEntity(shopEntity, memberEntity)));
   }
 
   public InquiryResponse getInquiry(Long id) {

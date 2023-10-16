@@ -42,13 +42,13 @@ public class Review {
         .build();
   }
 
-  public ReviewEntity toEntity() {
+  public ReviewEntity toEntity(ReservationEntity reservationEntity) {
     return ReviewEntity.builder()
         .title(this.title)
         .content(this.content)
         .image(this.image)
         .rating(this.rating)
-        .reservation(this.reservation.toEntity())
+        .reservation(reservationEntity)
         .createdAt(this.createdAt)
         .updatedAt(this.updatedAt)
         .build();

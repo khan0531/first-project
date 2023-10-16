@@ -8,6 +8,7 @@ import com.beauty.api.model.shop.persist.entity.ShopEntity;
 import com.beauty.api.model.user.domain.Member;
 import com.beauty.api.model.user.persist.entity.MemberEntity;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,7 +30,10 @@ public class Inquiry {
   private LocalDateTime updatedAt;
 
   public boolean isWrittenBy(Member member) {
-    return this.member.getId().equals(member.getId());
+    return Optional.ofNullable(this.member)
+        .map(Member::getId)
+        .map(memberId -> memberId.equals(member.getId()))
+        .orElse(false);
   }
 
   public static Inquiry fromRequest(InquiryRequest inquiryRequest, MemberEntity memberEntity, ShopEntity shopEntity) {
@@ -56,13 +60,13 @@ public class Inquiry {
         .build();
   }
 
-  public InquiryEntity toEntity() {
+  public InquiryEntity toEntity(ShopEntity shopEntity, MemberEntity memberEntity) {
     return InquiryEntity.builder()
         .title(this.title)
         .content(this.content)
         .image(this.image)
-        .member(this.member.toEntity())
-        .shop(this.shop.toEntity())
+        .member(memberEntity)
+        .shop(shopEntity)
         .createdAt(this.createdAt)
         .updatedAt(this.updatedAt)
         .build();
