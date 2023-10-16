@@ -76,11 +76,10 @@ public class InquiryService {
   public InquiryResponse getInquiry(UserDetails userDetails, Long id) {
     InquiryEntity inquiryEntity = this.inquiryRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("존재하지 않는 문의입니다."));
-//    TODO: 문의 조회 권한 체크
-//    if (!inquiryEntity.getMember().getId().equals(userDetails.getUsername())
-//        && !inquiryEntity.getShop().getMember().getId().equals(userDetails.getUsername())) {
-//      throw new RuntimeException("해당 문의를 조회할 권한이 없습니다.");
-//    }
+
+    if (!inquiryEntity.getMember().getEmail().equals(userDetails.getUsername())) {
+      throw new RuntimeException("해당 문의를 조회할 권한이 없습니다.");
+    }
 
     return InquiryResponse.fromEntity(inquiryEntity);
   }
