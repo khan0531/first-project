@@ -13,6 +13,7 @@ import com.beauty.api.model.user.domain.Member;
 import com.beauty.api.model.user.persist.entity.MemberEntity;
 import com.beauty.api.model.user.persist.repository.MemberRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -47,8 +48,10 @@ public class ReservationService {
     Reservation reservation = this.reservationRepository.findById(reservationUpdateRequest.getId())
         .map(Reservation::fromEntity)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다."));
+
     ShopEntity shopEntity = this.shopRepository.findById(reservation.getShopId())
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 가게입니다."));
+
     Shop shop = Shop.fromEntity(shopEntity);
     MemberEntity memberEntity = memberRepository.getById(member.getId());
 
@@ -63,9 +66,13 @@ public class ReservationService {
         this.reservationRepository.save(reservation.toEntity(shopEntity, memberEntity)));
   }
 
-  public ReservationResponse getReservation(Long id) {
+  public ReservationResponse getReservation(UserDetails userDetails, Long id) {
     ReservationEntity reservationEntity = this.reservationRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다."));
+
+    if (!reservationEntity.getMember().getEmail().equals(userDetails.getUsername())) {
+      throw new RuntimeException("해당 문의를 조회할 권한이 없습니다.");
+    }
 
     return ReservationResponse.fromEntity(reservationEntity);
   }

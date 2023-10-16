@@ -7,7 +7,9 @@ import com.beauty.api.model.user.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +28,7 @@ public class ReservationController {
 
   //예약하기
   @PostMapping
+  @PreAuthorize("hasRole('ROLE_MEMBER')")
   public ResponseEntity<?> reserve(@RequestBody ReservationRequest reservationRequest) {
     var result = this.reservationService.reserve(reservationRequest);
     return ResponseEntity.ok(result);
@@ -33,6 +36,7 @@ public class ReservationController {
 
   //예약 수정
   @PatchMapping("/{id}")
+  @PreAuthorize("hasRole('ROLE_MEMBER')")
   public ResponseEntity<?> updateReservation(@AuthenticationPrincipal Member member, @PathVariable Long id,
       @RequestBody ReservationUpdateRequest reservationUpdateRequest) {
     if (!reservationUpdateRequest.getId().equals(id)) {
@@ -44,8 +48,9 @@ public class ReservationController {
 
   //예약 상세 조회
   @GetMapping("/{id}")
-  public ResponseEntity<?> getReservation(@PathVariable Long id) {
-    var result = this.reservationService.getReservation(id);
+  @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MEMBER')")
+  public ResponseEntity<?> getReservation(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id) {
+    var result = this.reservationService.getReservation(userDetails, id);
     return ResponseEntity.ok(result);
   }
 }

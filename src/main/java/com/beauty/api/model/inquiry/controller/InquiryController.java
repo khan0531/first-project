@@ -8,7 +8,9 @@ import com.beauty.api.model.user.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,13 +29,15 @@ public class InquiryController {
 
   //문의 상세 보기
   @GetMapping("/{id}")
-  public ResponseEntity<?> getInquiry(@AuthenticationPrincipal Member member, @PathVariable Long id) {
-    InquiryResponse inquiryResponse = this.inquiryService.getInquiry(id);
+  @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MEMBER')")
+  public ResponseEntity<?> getInquiry(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id) {
+    InquiryResponse inquiryResponse = this.inquiryService.getInquiry(userDetails, id);
     return ResponseEntity.ok(inquiryResponse);
   }
 
   //내 문의 수정
   @PatchMapping("/{id}")
+  @PreAuthorize("hasRole('ROLE_MEMBER')")
   public ResponseEntity<?> updateInquiry(@AuthenticationPrincipal Member member, @PathVariable Long id,
       @RequestBody InquiryUpdateRequest inquiryUpdateRequest) {
     if (!inquiryUpdateRequest.getId().equals(id)) {
@@ -46,6 +50,7 @@ public class InquiryController {
 
   //문의 등록
   @PostMapping
+  @PreAuthorize("hasRole('ROLE_MEMBER')")
   public ResponseEntity<?> writeInquiry(@AuthenticationPrincipal Member member,
       @RequestBody InquiryRequest inquiryRequest) {
     if (!inquiryRequest.getMemberId().equals(member.getId())) {

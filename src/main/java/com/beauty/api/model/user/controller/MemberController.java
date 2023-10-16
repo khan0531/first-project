@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,6 +66,7 @@ public class MemberController {
 
   //회원 정보 수정
   @PutMapping
+  @PreAuthorize("hasRole('ROLE_MEMBER')")
   public ResponseEntity<?> updateMember(@AuthenticationPrincipal Member member,
       @RequestBody @Valid MemberUpdateRequest memberUpdateRequest) {
     MemberResponse result = this.memberService.updateMember(member, memberUpdateRequest);
@@ -73,6 +75,7 @@ public class MemberController {
 
   //비밀번호 수정
   @PatchMapping("/{id}/password")
+  @PreAuthorize("hasRole('ROLE_MEMBER')")
   public ResponseEntity<?> updatePassword(@AuthenticationPrincipal Member member,
       @RequestBody MemberUpdatePassword memberUpdatePassword, @PathVariable Long id) {
     if (!member.getId().equals(id)) {
@@ -84,6 +87,7 @@ public class MemberController {
 
   //회원 탈퇴
   @DeleteMapping
+  @PreAuthorize("hasRole('ROLE_MEMBER')")
   public ResponseEntity<?> deleteMember(@AuthenticationPrincipal Member member, @RequestParam Long id) {
 
     this.memberService.deleteMember(member, id);
@@ -93,6 +97,7 @@ public class MemberController {
 
   //회원 정보 조회(내 정보 보기)
   @GetMapping("/{id}")
+  @PreAuthorize("hasRole('ROLE_MEMBER')")
   public ResponseEntity<?> getMember(@AuthenticationPrincipal Member member, @RequestParam Long id) {
     MemberResponse memberResponse = this.memberService.getMember(member, id);
     return ResponseEntity.ok(memberResponse);

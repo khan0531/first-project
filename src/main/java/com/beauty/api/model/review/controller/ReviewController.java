@@ -8,6 +8,7 @@ import com.beauty.api.model.user.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,6 +28,7 @@ public class ReviewController {
 
   //내 예약에 대한 리뷰 작성
   @PostMapping
+  @PreAuthorize("hasRole('ROLE_MEMBER')")
   public ResponseEntity<?> writeReview(@AuthenticationPrincipal Member member,
       @RequestBody ReviewRequest reviewRequest) {
     ReviewResponse reviewResponse = this.reviewService.writeReview(member, reviewRequest);
@@ -42,6 +44,7 @@ public class ReviewController {
 
   //내 예약에 대한 리뷰 수정
   @PatchMapping("/{id}")
+  @PreAuthorize("hasRole('ROLE_MEMBER')")
   public ResponseEntity<?> updateReview(@AuthenticationPrincipal Member member,
       @PathVariable Long id, @RequestBody ReviewUpdateRequest reviewUpdateRequest) {
 
