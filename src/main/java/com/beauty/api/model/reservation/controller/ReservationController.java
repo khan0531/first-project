@@ -7,7 +7,6 @@ import com.beauty.api.model.review.dto.ReviewRequest;
 import com.beauty.api.model.review.dto.ReviewResponse;
 import com.beauty.api.model.review.service.ReviewService;
 import com.beauty.api.model.user.domain.Member;
-import com.beauty.api.model.user.persist.entity.MemberEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -32,17 +31,20 @@ public class ReservationController {
 
   //예약하기
   @PostMapping
-  public ResponseEntity<?> reservation(@AuthenticationPrincipal MemberEntity memberEntity,
+  public ResponseEntity<?> reserve(@AuthenticationPrincipal Member member,
       @RequestBody ReservationRequest reservationRequest) {
-    var result = this.reservationService.reservation(reservationRequest);
+    var result = this.reservationService.reserve(reservationRequest);
     return ResponseEntity.ok(result);
   }
 
   //예약 수정
   @PatchMapping("/{id}")
-  public ResponseEntity<?> updateReservation(@AuthenticationPrincipal MemberEntity memberEntity, @PathVariable Long id,
+  public ResponseEntity<?> updateReservation(@AuthenticationPrincipal Member member, @PathVariable Long id,
       @RequestBody ReservationUpdateRequest reservationUpdateRequest) {
-    var result = this.reservationService.updateReservation(reservationUpdateRequest);
+    if (!reservationUpdateRequest.getId().equals(id)) {
+      throw new RuntimeException("예약 정보가 일치하지 않습니다.");
+    }
+    var result = this.reservationService.updateReservation(member, reservationUpdateRequest);
     return ResponseEntity.ok(result);
   }
 

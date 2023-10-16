@@ -1,9 +1,13 @@
 package com.beauty.api.model.shop.domain;
 
+import com.beauty.api.model.reservation.domain.Reservation;
 import com.beauty.api.model.shop.dto.constants.CosmeticType;
 import com.beauty.api.model.shop.persist.entity.ShopEntity;
 import com.beauty.api.model.user.domain.AdminMember;
+import com.beauty.api.model.user.persist.entity.AdminMemberEntity;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,13 +28,25 @@ public class Shop {
   private double longitude;
   private Set<CosmeticType> cosmeticTypes;
   private String phone;
-  private LocalDateTime openTime;
-  private LocalDateTime closeTime;
+  private LocalTime openTime;
+  private LocalTime closeTime;
   private String description;
   private Long ratingSum;
   private Long reviewCount;
+  private List<Reservation> reservations;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
+
+  public void validate(Reservation reservation) {
+    if (reservation.getReservationTime().toLocalTime().isBefore(openTime)
+        || reservation.getReservationTime().toLocalTime().isAfter(closeTime)) {
+      throw new IllegalArgumentException("영업시간이 아닙니다.");
+    }
+
+    if (reservations.stream().anyMatch(r -> r.getReservationTime().equals(reservation.getReservationTime()))) {
+      throw new IllegalArgumentException("이미 예약된 시간입니다.");
+    }
+  }
 
   public static Shop fromEntity(ShopEntity shopEntity) {
     return Shop.builder()
@@ -47,15 +63,18 @@ public class Shop {
         .description(shopEntity.getDescription())
         .ratingSum(shopEntity.getRatingSum())
         .reviewCount(shopEntity.getReviewCount())
+        .reservations(shopEntity.getReservations().stream()
+            .map(Reservation::fromEntity)
+            .toList())
         .createdAt(shopEntity.getCreatedAt())
         .updatedAt(shopEntity.getUpdatedAt())
         .build();
   }
 
-  public ShopEntity toEntity() {
+  public ShopEntity toEntity(AdminMemberEntity adminMemberEntity) {
     return ShopEntity.builder()
         .name(this.name)
-        .adminMember(this.adminMember.toEntity())
+        .adminMember(adminMemberEntity)
         .address(this.address)
         .latitude(this.latitude)
         .longitude(this.longitude)
