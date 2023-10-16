@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,6 +58,7 @@ public class AdminMemberController {
 
   //회원 정보 수정
   @PutMapping
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<?> updateAdminMember(@AuthenticationPrincipal AdminMember adminMember,
       @RequestBody AdminMemberUpdateRequest adminMemberUpdateRequest) {
     AdminMemberResponse result = this.adminMemberService.updateAdminMember(adminMember, adminMemberUpdateRequest);
@@ -65,6 +67,7 @@ public class AdminMemberController {
 
   //비밀번호 수정
   @PatchMapping("/{id}/password")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<?> updatePassword(@AuthenticationPrincipal AdminMember adminMember,
       @RequestBody AdminMemberUpdatePassword adminMemberUpdatePassword, @PathVariable Long id) {
     if (!adminMember.getId().equals(id)) {
@@ -83,6 +86,7 @@ public class AdminMemberController {
 
   //회원 탈퇴
   @DeleteMapping
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<?> deleteUser(@AuthenticationPrincipal AdminMember adminMember, Long id) {
     this.adminMemberService.deleteAdminMember(adminMember, id);
     return ResponseEntity.ok().build();
@@ -90,6 +94,7 @@ public class AdminMemberController {
 
   //회원 정보 조회
   @GetMapping("/{id}")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<?> getAdminMember(@AuthenticationPrincipal AdminMember adminMember, Long id) {
     AdminMemberResponse result = this.adminMemberService.getAdminMember(adminMember, id);
     return ResponseEntity.ok(result);

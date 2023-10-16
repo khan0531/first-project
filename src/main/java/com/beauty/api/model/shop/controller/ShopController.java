@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,6 +30,7 @@ public class ShopController {
 
   //샵 등록
   @PostMapping
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<?> register(@AuthenticationPrincipal AdminMember adminMember,
       @RequestBody ShopRequest shopRequest) {
     ShopResponse result = this.shopService.register(adminMember, shopRequest);
@@ -37,6 +39,7 @@ public class ShopController {
 
   //샵 정보 수정
   @PatchMapping("/{id}")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<?> updateShop(@AuthenticationPrincipal AdminMember adminMember,
       @RequestBody ShopUpdateRequest shopUpdateRequest, @PathVariable Long id) {
     if (!adminMember.getId().equals(id)) {
