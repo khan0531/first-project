@@ -3,11 +3,7 @@ package com.beauty.api.model.reservation.controller;
 import com.beauty.api.model.reservation.dto.ReservationRequest;
 import com.beauty.api.model.reservation.dto.ReservationUpdateRequest;
 import com.beauty.api.model.reservation.service.ReservationService;
-import com.beauty.api.model.review.dto.ReviewInput;
-import com.beauty.api.model.review.dto.ReviewResponse;
-import com.beauty.api.model.review.service.ReviewService;
-import com.beauty.api.model.user.dto.Member;
-import com.beauty.api.model.user.persist.entity.MemberEntity;
+import com.beauty.api.model.user.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,21 +24,21 @@ public class ReservationController {
 
   private final ReservationService reservationService;
 
-  private final ReviewService reviewService;
-
   //예약하기
   @PostMapping
-  public ResponseEntity<?> reservation(@AuthenticationPrincipal MemberEntity memberEntity,
-      @RequestBody ReservationRequest reservationRequest) {
-    var result = this.reservationService.reservation(reservationRequest);
+  public ResponseEntity<?> reserve(@RequestBody ReservationRequest reservationRequest) {
+    var result = this.reservationService.reserve(reservationRequest);
     return ResponseEntity.ok(result);
   }
 
   //예약 수정
   @PatchMapping("/{id}")
-  public ResponseEntity<?> updateReservation(@AuthenticationPrincipal MemberEntity memberEntity, @PathVariable Long id,
+  public ResponseEntity<?> updateReservation(@AuthenticationPrincipal Member member, @PathVariable Long id,
       @RequestBody ReservationUpdateRequest reservationUpdateRequest) {
-    var result = this.reservationService.updateReservation(reservationUpdateRequest);
+    if (!reservationUpdateRequest.getId().equals(id)) {
+      throw new RuntimeException("예약 정보가 일치하지 않습니다.");
+    }
+    var result = this.reservationService.updateReservation(member, reservationUpdateRequest);
     return ResponseEntity.ok(result);
   }
 
@@ -52,19 +48,4 @@ public class ReservationController {
     var result = this.reservationService.getReservation(id);
     return ResponseEntity.ok(result);
   }
-
-  //내 예약에 대한 리뷰 작성
-  @PostMapping("/{id}/review")
-  public ResponseEntity<?> writeReview(@AuthenticationPrincipal Member member, @PathVariable Long id,
-      @RequestBody ReviewInput reviewInput) {
-
-    if (reviewInput.getReservationId() != id) {
-      throw new RuntimeException("예약 정보가 일치하지 않습니다.");
-    }
-
-    ReviewResponse reviewResponse = this.reviewService.writeReview(reviewInput);
-    return ResponseEntity.ok(reviewResponse);
-  }
-
-
 }

@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewUpdateRequest {
+public class ReviewRequest {
 
-  private Long id;
+  private Long reservationId;
   private String title;
   private String content;
   private String image;

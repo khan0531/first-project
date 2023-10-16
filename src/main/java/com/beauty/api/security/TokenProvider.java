@@ -1,5 +1,7 @@
 package com.beauty.api.security;
 
+import com.beauty.api.model.user.dto.constants.Authority;
+import com.beauty.api.model.user.service.AdminMemberService;
 import com.beauty.api.model.user.service.MemberService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,18 +27,20 @@ public class TokenProvider {
 
   private final MemberService memberService;
 
+  private final AdminMemberService adminMemberService;
+
   @Value("${jwt.secret}")
   private String secretKey;
 
-  public String generateToken(String username, List<String> roles) {
+  public String generateToken(UserDetails userDetails) {
     // 다음 정보들을 포함한 claims 생성
     //      - username
     //      - roles
     //      - 생성 시간
     //      - 만료 시간
     //      - signature
-    Claims claims = Jwts.claims().setSubject(username);
-    claims.put(KEY_ROLES, roles);
+    Claims claims = Jwts.claims().setSubject(userDetails.getUsername());
+    claims.put(KEY_ROLES, userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
 
     var now = new Date();
     var expireDate = new Date(now.getTime() + TOKEN_EXPIRE_TIME); //토큰 생성 후 한시간 유효하다.
@@ -51,7 +56,15 @@ public class TokenProvider {
 
   @Transactional
   public Authentication getAuthentication(String jwt) {
-    UserDetails userDetails = this.memberService.loadUserByUsername(this.getUsername(jwt));
+    Jws<Claims> claims = Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(jwt);
+    List roles = claims.getBody().get("roles", List.class);
+    String role = String.valueOf(roles.get(0));
+    UserDetails userDetails;
+    if (role.equals(Authority.ROLE_ADMIN.name())) {
+      userDetails = this.adminMemberService.loadUserByUsername(this.getUsername(jwt));
+    } else {
+      userDetails = this.memberService.loadUserByUsername(this.getUsername(jwt));
+    }
     return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
   }
 

@@ -1,7 +1,7 @@
 package com.beauty.api.model.shop.dto;
 
 import com.beauty.api.model.shop.persist.entity.ShopEntity;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,8 +16,8 @@ public class ShopResponse {
   private String name;
   private String address;
   private String phone;
-  private LocalDateTime openTime;
-  private LocalDateTime closeTime;
+  private LocalTime openTime;
+  private LocalTime closeTime;
   private String description;
   private Double rating;
   private Long reviewCount;

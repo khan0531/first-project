@@ -1,15 +1,14 @@
 package com.beauty.api.model.user.controller;
 
-import com.beauty.api.model.inquiry.dto.InquiryResponse;
-import com.beauty.api.model.inquiry.dto.InquiryUpdateRequest;
 import com.beauty.api.model.inquiry.service.InquiryService;
 import com.beauty.api.model.reservation.service.ReservationService;
-import com.beauty.api.model.review.dto.ReviewResponse;
-import com.beauty.api.model.review.dto.ReviewUpdateRequest;
 import com.beauty.api.model.review.service.ReviewService;
-import com.beauty.api.model.user.dto.Member;
+import com.beauty.api.model.user.domain.Member;
+import com.beauty.api.model.user.dto.MemberFindEmail;
+import com.beauty.api.model.user.dto.MemberResponse;
 import com.beauty.api.model.user.dto.MemberSignInRequest;
 import com.beauty.api.model.user.dto.MemberSignUpRequest;
+import com.beauty.api.model.user.dto.MemberUpdatePassword;
 import com.beauty.api.model.user.dto.MemberUpdateRequest;
 import com.beauty.api.model.user.service.MemberService;
 import com.beauty.api.security.TokenProvider;
@@ -58,49 +57,52 @@ public class MemberController {
     var memberEntity = this.memberService.signIn(memberSignInRequest);
     Member member = Member.fromEntity(memberEntity);
 
-    String token = this.tokenProvider.generateToken(
-        member.getUsername(),
-        member.getRoles().stream().map(Enum::name).collect(java.util.stream.Collectors.toList())
-    );
+    String token = this.tokenProvider.generateToken(member);
     log.info("user login -> " + memberSignInRequest.getEmail());
     return ResponseEntity.ok(token);
   }
 
 
   //회원 정보 수정
-  // TODO
   @PutMapping
-  public ResponseEntity<?> updateUser(@AuthenticationPrincipal Member member,
+  public ResponseEntity<?> updateMember(@AuthenticationPrincipal Member member,
       @RequestBody @Valid MemberUpdateRequest memberUpdateRequest) {
-    var result = this.memberService.updateUser(memberUpdateRequest);
+    MemberResponse result = this.memberService.updateMember(member, memberUpdateRequest);
     return ResponseEntity.ok(result);
   }
 
   //비밀번호 수정
-  @PatchMapping("/password")
-  public ResponseEntity<?> updatePassword(@AuthenticationPrincipal Member member) {
-    return null;
+  @PatchMapping("/{id}/password")
+  public ResponseEntity<?> updatePassword(@AuthenticationPrincipal Member member,
+      @RequestBody MemberUpdatePassword memberUpdatePassword, @PathVariable Long id) {
+    if (!member.getId().equals(id)) {
+      throw new IllegalArgumentException("해당 회원의 정보가 아닙니다.");
+    }
+    MemberResponse result = this.memberService.updatePassword(member, memberUpdatePassword);
+    return ResponseEntity.ok(result);
   }
 
   //회원 탈퇴
   @DeleteMapping
-  public ResponseEntity<?> deleteUser(@AuthenticationPrincipal Member member, @RequestParam Long id) {
+  public ResponseEntity<?> deleteMember(@AuthenticationPrincipal Member member, @RequestParam Long id) {
 
-    this.memberService.deleteUser(id);
+    this.memberService.deleteMember(member, id);
 
     return ResponseEntity.ok().build();
   }
 
   //회원 정보 조회(내 정보 보기)
   @GetMapping("/{id}")
-  public ResponseEntity<?> getUser(@AuthenticationPrincipal Member member, @RequestParam Long id) {
-    return null;
+  public ResponseEntity<?> getMember(@AuthenticationPrincipal Member member, @RequestParam Long id) {
+    MemberResponse memberResponse = this.memberService.getMember(member, id);
+    return ResponseEntity.ok(memberResponse);
   }
 
   //아이디(이메일) 찾기
   @GetMapping("/email")
-  public ResponseEntity<?> findEmail() {
-    return null;
+  public ResponseEntity<?> findEmail(@RequestBody MemberFindEmail memberFindEmail) {
+    MemberResponse result = this.memberService.findEmail(memberFindEmail);
+    return ResponseEntity.ok(result);
   }
 
   //비밀번호 찾기(재설정)
@@ -121,25 +123,10 @@ public class MemberController {
     return null;
   }
 
-  //내 예약에 대한 리뷰 수정
-  @PatchMapping("/{memberId}/review/{reviewId}")
-  public ResponseEntity<?> updateReview(@AuthenticationPrincipal Member member, @PathVariable Long memberId,
-      @PathVariable Long reviewId, @RequestBody ReviewUpdateRequest reviewUpdateRequest) {
-    ReviewResponse reviewResponse = this.reviewService.updateReview(reviewUpdateRequest);
-    return ResponseEntity.ok(reviewResponse);
-  }
 
   //내 문의 조회
   @GetMapping("/{id}/inquiry")
   public ResponseEntity<?> getInquiryList(@AuthenticationPrincipal Member member, @PathVariable Long id) {
     return null;
-  }
-
-  //내 문의 수정
-  @PatchMapping("/{memberId}/inquiry/{inquiryId}")
-  public ResponseEntity<?> updateInquiry(@AuthenticationPrincipal Member member, @PathVariable Long inquiryId,
-      @PathVariable Long memberId, @RequestBody InquiryUpdateRequest inquiryUpdateRequest) {
-    InquiryResponse inquiryResponse = this.inquiryService.updateInquiry(inquiryUpdateRequest);
-    return ResponseEntity.ok(inquiryResponse);
   }
 }

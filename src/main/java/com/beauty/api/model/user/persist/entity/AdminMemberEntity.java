@@ -12,8 +12,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,17 +28,13 @@ public class AdminMemberEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotBlank(message = "이름을 입력해주세요.")
   private String name;
 
-  @Email(message = "이메일 형식이 아닙니다.")
   @Column(unique = true)
   private String email;
 
-  @NotBlank(message = "비밀번호를 입력해주세요.")
   private String password;
 
-  @NotBlank(message = "전화번호를 입력해주세요.")
   @Column(unique = true)
   private String phone;
 

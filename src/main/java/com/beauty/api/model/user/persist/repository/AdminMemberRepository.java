@@ -6,7 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AdminMemberRepository extends JpaRepository<AdminMemberEntity, String> {
+public interface AdminMemberRepository extends JpaRepository<AdminMemberEntity, Long> {
 
   Optional<AdminMemberEntity> findByEmail(String email);
+
+  boolean existsByEmail(String email);
+
+  Optional<AdminMemberEntity> findByNameAndName(String name, String name1);
 }
