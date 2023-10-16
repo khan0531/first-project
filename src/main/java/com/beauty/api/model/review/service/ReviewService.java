@@ -27,9 +27,13 @@ public class ReviewService {
     return ReviewResponse.fromEntity(reviewEntity);
   }
 
-  public ReviewResponse writeReview(ReviewRequest reviewRequest) {
+  public ReviewResponse writeReview(Member member, ReviewRequest reviewRequest) {
     ReservationEntity reservationEntity = this.reservationRepository.findById(reviewRequest.getReservationId())
         .orElseThrow(() -> new RuntimeException("예약 정보가 없습니다."));
+
+    if (!reservationEntity.getMember().getId().equals(member.getId())) {
+      throw new RuntimeException("예약자만 리뷰를 작성할 수 있습니다.");
+    }
 
     this.reviewRepository.findByReservation(reservationEntity)
         .ifPresent(reviewEntity -> {
