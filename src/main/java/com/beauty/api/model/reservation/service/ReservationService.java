@@ -48,8 +48,10 @@ public class ReservationService {
     Reservation reservation = this.reservationRepository.findById(reservationUpdateRequest.getId())
         .map(Reservation::fromEntity)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다."));
+
     ShopEntity shopEntity = this.shopRepository.findById(reservation.getShopId())
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 가게입니다."));
+
     Shop shop = Shop.fromEntity(shopEntity);
     MemberEntity memberEntity = memberRepository.getById(member.getId());
 
