@@ -3,7 +3,6 @@ package com.beauty.api.model.reservation.controller;
 import com.beauty.api.model.reservation.dto.ReservationRequest;
 import com.beauty.api.model.reservation.dto.ReservationUpdateRequest;
 import com.beauty.api.model.reservation.service.ReservationService;
-import com.beauty.api.model.review.service.ReviewService;
 import com.beauty.api.model.user.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +24,9 @@ public class ReservationController {
 
   private final ReservationService reservationService;
 
-  private final ReviewService reviewService;
-
   //예약하기
   @PostMapping
-  public ResponseEntity<?> reserve(@AuthenticationPrincipal Member member,
-      @RequestBody ReservationRequest reservationRequest) {
+  public ResponseEntity<?> reserve(@RequestBody ReservationRequest reservationRequest) {
     var result = this.reservationService.reserve(reservationRequest);
     return ResponseEntity.ok(result);
   }

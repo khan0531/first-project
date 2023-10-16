@@ -1,6 +1,7 @@
 package com.beauty.api.model.shop.domain;
 
 import com.beauty.api.model.reservation.domain.Reservation;
+import com.beauty.api.model.shop.dto.ShopRequest;
 import com.beauty.api.model.shop.dto.constants.CosmeticType;
 import com.beauty.api.model.shop.persist.entity.ShopEntity;
 import com.beauty.api.model.user.domain.AdminMember;
@@ -36,6 +37,18 @@ public class Shop {
   private List<Reservation> reservations;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
+
+  public static Shop fromRequest(ShopRequest shopRequest, AdminMemberEntity adminMemberEntity) {
+    return Shop.builder()
+        .name(shopRequest.getName())
+        .adminMember(AdminMember.fromEntity(adminMemberEntity))
+        .address(shopRequest.getAddress())
+        .phone(shopRequest.getPhone())
+        .openTime(shopRequest.getOpenTime())
+        .closeTime(shopRequest.getCloseTime())
+        .description(shopRequest.getDescription())
+        .build();
+  }
 
   public void validate(Reservation reservation) {
     if (reservation.getReservationTime().toLocalTime().isBefore(openTime)
