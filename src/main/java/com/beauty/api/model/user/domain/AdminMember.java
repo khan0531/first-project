@@ -73,7 +73,7 @@ public class AdminMember implements UserDetails {
         .email(adminMemberSignUpRequest.getEmail())
         .password(adminMemberSignUpRequest.getPassword())
         .phone(adminMemberSignUpRequest.getPhone())
-        .roles(Collections.singletonList(Authority.ROLE_USER))
+        .roles(Collections.singletonList(Authority.ROLE_ADMIN))
         .createdAt(LocalDateTime.now())
         .build();
   }

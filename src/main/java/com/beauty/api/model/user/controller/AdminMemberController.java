@@ -35,14 +35,14 @@ public class AdminMemberController {
 
   private final TokenProvider tokenProvider;
 
-  @PostMapping("/signup")
+  @PostMapping("/sign-up")
   public ResponseEntity<?> signUp(@RequestBody @Valid AdminMemberSignUpRequest adminMemberSignUpRequest) {
     AdminMemberResponse result = this.adminMemberService.signUp(adminMemberSignUpRequest);
     return ResponseEntity.ok(result);
   }
 
   //로그인
-  @PostMapping("/signIn")
+  @PostMapping("/sign-in")
   public ResponseEntity<?> signIn(@RequestBody AdminMemberSignInRequest adminMemberSignInRequest) {
     AdminMemberEntity adminMemberEntity = this.adminMemberService.signIn(adminMemberSignInRequest);
     AdminMember adminMember = AdminMember.fromEntity(adminMemberEntity);
