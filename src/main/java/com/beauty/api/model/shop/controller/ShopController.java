@@ -2,6 +2,7 @@ package com.beauty.api.model.shop.controller;
 
 import com.beauty.api.model.shop.dto.ShopRequest;
 import com.beauty.api.model.shop.dto.ShopResponse;
+import com.beauty.api.model.shop.dto.ShopUpdateRequest;
 import com.beauty.api.model.shop.service.ShopService;
 import com.beauty.api.model.user.domain.AdminMember;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,16 +36,16 @@ public class ShopController {
   }
 
   //샵 정보 수정
-//  @PatchMapping("/{id}")
-//  public ResponseEntity<?> updateShop(@AuthenticationPrincipal AdminMember adminMember,
-//      @RequestBody ShopUpdateRequest shopUpdateRequest, @PathVariable Long id) {
-//    if (!adminMember.getId().equals(id)) {
-//      throw new IllegalArgumentException("권한이 없습니다.");
-//    }
-//
-//    ShopResponse result = this.shopService.updateShop(adminMember, shopUpdateRequest);
-//    return ResponseEntity.ok(result);
-//  }
+  @PatchMapping("/{id}")
+  public ResponseEntity<?> updateShop(@AuthenticationPrincipal AdminMember adminMember,
+      @RequestBody ShopUpdateRequest shopUpdateRequest, @PathVariable Long id) {
+    if (!adminMember.getId().equals(id)) {
+      throw new IllegalArgumentException("권한이 없습니다.");
+    }
+
+    ShopResponse result = this.shopService.updateShop(adminMember, shopUpdateRequest);
+    return ResponseEntity.ok(result);
+  }
 
   //샵 리스트 조회
   @GetMapping

@@ -2,6 +2,7 @@ package com.beauty.api.model.shop.domain;
 
 import com.beauty.api.model.reservation.domain.Reservation;
 import com.beauty.api.model.shop.dto.ShopRequest;
+import com.beauty.api.model.shop.dto.ShopUpdateRequest;
 import com.beauty.api.model.shop.dto.constants.CosmeticType;
 import com.beauty.api.model.shop.persist.entity.ShopEntity;
 import com.beauty.api.model.user.domain.AdminMember;
@@ -101,5 +102,35 @@ public class Shop {
         .createdAt(LocalDateTime.now())
         .updatedAt(LocalDateTime.now())
         .build();
+  }
+
+  public Shop updateShop(ShopUpdateRequest shopUpdateRequest) {
+    if (shopUpdateRequest.getName() != null) {
+      this.name = shopUpdateRequest.getName();
+    }
+
+    if (shopUpdateRequest.getAddress() != null) {
+      this.address = shopUpdateRequest.getAddress();
+    }
+
+    if (shopUpdateRequest.getPhone() != null) {
+      this.phone = shopUpdateRequest.getPhone();
+    }
+
+    if (shopUpdateRequest.getOpenTime() != null) {
+      this.openTime = shopUpdateRequest.getOpenTime();
+    }
+
+    if (shopUpdateRequest.getCloseTime() != null) {
+      this.closeTime = shopUpdateRequest.getCloseTime();
+    }
+
+    if (shopUpdateRequest.getDescription() != null) {
+      this.description = shopUpdateRequest.getDescription();
+    }
+
+    this.updatedAt = LocalDateTime.now();
+
+    return this;
   }
 }
